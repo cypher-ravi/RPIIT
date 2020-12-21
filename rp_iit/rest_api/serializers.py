@@ -1,9 +1,9 @@
 from rest_framework.serializers import ModelSerializer,SerializerMethodField
-from .models import Announcement,Department
+from .models import Announcement,Department, Resume
 from drf_extra_fields.fields import Base64ImageField
 import base64
 class AnnouncementSerializer(ModelSerializer):
-    img = SerializerMethodField()
+    img = SerializerMethodField(method_name='get_img')
     class Meta:
         model = Announcement
         exclude = ['department']
@@ -19,7 +19,11 @@ class AnnouncementSerializer(ModelSerializer):
         except:
             return None 
 
-
+class ResumeUploadSerializer(ModelSerializer):
+    class Meta:
+        model = Resume
+        fields = '__all__'
+        
 
 
  
