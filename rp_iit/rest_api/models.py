@@ -32,3 +32,21 @@ class Announcement(models.Model):
 
     # def get_absolute_url(self):
     #     return reverse("Announcement_detail", kwargs={"pk": self.pk})
+
+class Resume(models.Model):
+    name = models.CharField(max_length = 25)
+    father_name = models.CharField(max_length = 25)
+    mobile = models.CharField(max_length = 12)
+    email = models.EmailField()
+    address = models.TextField()
+    h_qualification = models.TextField()
+    trade = models.CharField(max_length = 25)
+    work_experience = models.TextField()
+    projects = models.TextField()
+    achivement = models.TextField()
+    certification = models.CharField(max_length = 100)
+    skills = models.CharField(max_length = 100)
+    intrests = models.CharField(max_length = 100)
+
+    def __str__(self):
+        return self.name
