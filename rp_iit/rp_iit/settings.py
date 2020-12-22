@@ -39,9 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_api',
+    'authentication',
+
     #third party libraries
     'rest_framework',
-    'drf_extra_fields'
+    'drf_extra_fields',
+    'rest_framework_swagger',
+    
+    
 ]
 
 MIDDLEWARE = [
@@ -129,8 +134,39 @@ STATIC_ROOT = os.path.join(VENV_PATH, 'static_root')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(VENV_PATH, 'media')
 
-REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
-                   'DEFAULT_METADATA_CLASS': 'rest_framework.metadata.SimpleMetadata',
-                   
-                   
-                   }
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES':(
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ),
+    'DEFAULT_PERMISSION_CLASSES':(
+        # 'rest_framework.permissions.IsAuthenticated',
+        
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
+}
+
+AUTH_USER_MODEL = "authentication.User"
+
+
+DJOSER = { 
+    'LOGIN_FIELD':'phone',
+    'SERIALIZERS': {
+        'user_create':'authentication.serializers.UserCreateSerializer',
+        'user':'authentication.serializers.UserCreateSerializer',
+    }
+}
+
+
+SWAGGER_SETTINGS = {
+    'LOGIN_URL': 'A5740DB2B7C1FE79CA9A2FDC8491B2C6/auth/token/login',
+    'LOGOUT_URL': 'A5740DB2B7C1FE79CA9A2FDC8491B2C6/auth/token/logout',
+    'USE_SESSION_AUTH': True,
+    'DOC_EXPANSION': 'list',
+    'APIS_SORTER': 'alpha',
+    'SHOW_REQUEST_HEADERS': True
+}

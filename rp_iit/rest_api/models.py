@@ -1,5 +1,5 @@
 from django.db import models
-
+from authentication.models import User
 # Create your models here.
 
 class Department(models.Model):
@@ -32,8 +32,25 @@ class Announcement(models.Model):
 
     # def get_absolute_url(self):
     #     return reverse("Announcement_detail", kwargs={"pk": self.pk})
+class Student(models.Model):
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    name = models.CharField(max_length=225,default='',blank=True, null=True)
+    father_name = models.CharField(max_length=225,default='',blank=True, null=True)
+    mobile_number = models.CharField(max_length=14,default='',blank=True,null=True)
+    email = models.EmailField()
+    address = models.CharField(max_length= 1000,default='',blank=True,null=True)
+    age = models.IntegerField()
+    department = models.ForeignKey(Department,on_delete=models.CASCADE)
+    semester_or_year = models.CharField(max_length =225,default='',blank=True,null=True)
+    profile_submit_date = models.DateTimeField(auto_now_add=True)
+
+
+    def __str__(self): return self.name
+
+
 
 class Resume(models.Model):
+    user = models.OneToOneField(User,on_delete=models.CASCADE,blank=True,null=True)
     name = models.CharField(max_length = 25)
     father_name = models.CharField(max_length = 25)
     mobile = models.CharField(max_length = 12)
@@ -50,3 +67,17 @@ class Resume(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class PlacementCompany(models.Model):
+    name = models.CharField(max_length =50)
+    description = models.TextField()
+    address = models.CharField(max_length = 225,default='')
+    city = models.CharField(max_length = 25,default='')
+    state = models.CharField(max_length =25,default='')
+    added_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self): return self.name
+
+
+

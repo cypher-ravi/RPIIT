@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer,SerializerMethodField
-from .models import Announcement,Department, Resume
+from .models import Announcement,Department, Resume,Student,PlacementCompany
 from drf_extra_fields.fields import Base64ImageField
 import base64
 class AnnouncementSerializer(ModelSerializer):
@@ -30,4 +30,16 @@ class ResumeUploadSerializer(ModelSerializer):
 class DepartmentSerializer(ModelSerializer):
     class Meta:
         model = Department
+        fields = '__all__'
+
+
+class StudentProfileSerializer(ModelSerializer):
+    class Meta:
+        model = Student
+        fields = '__all__'
+
+
+class PlacementCompanySerializer(ModelSerializer):
+    class Meta:
+        model = PlacementCompany
         fields = '__all__'
