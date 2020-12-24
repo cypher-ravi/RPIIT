@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 import os
 # for heroku
-import django_heroku
+# import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -122,15 +122,17 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
+from django.utils import timezone
 
-TIME_ZONE =  'Asia/Kolkata'
+# my_local_time = timezone.localtime(timezone.now())
+TIME_ZONE =  'GMT'
 
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -151,7 +153,7 @@ REST_FRAMEWORK = {
         # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ),
     'DEFAULT_PERMISSION_CLASSES':(
-        # 'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticated',
         
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
@@ -165,13 +167,13 @@ AUTH_USER_MODEL = "authentication.User"
 
 
 SWAGGER_SETTINGS = {
-    'LOGIN_URL': 'A5740DB2B7C1FE79CA9A2FDC8491B2C6/auth/register_and_login',
-    # 'LOGOUT_URL': 'A5740DB2B7C1FE79CA9A2FDC8491B2C6/auth/token/logout',
+    'LOGIN_URL': 'A5740DB2B7C1FE79CA9A2FDC8491B2C6/auth/login',
+    'LOGOUT_URL': 'A5740DB2B7C1FE79CA9A2FDC8491B2C6/auth/logout/',
     'USE_SESSION_AUTH': True,
     'DOC_EXPANSION': 'list',
     'APIS_SORTER': 'alpha',
     'SHOW_REQUEST_HEADERS': True
 }
 
-django_heroku.settings(locals())
+# django_heroku.settings(locals())
     

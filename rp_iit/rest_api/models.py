@@ -25,7 +25,7 @@ class Announcement(models.Model):
     
 
     class Meta:
-        verbose_name_plural = "Announcements"
+        verbose_name_plural = "Announcements list"
 
     def __str__(self):
         return self.title
@@ -38,6 +38,9 @@ class Announcement(models.Model):
 class Sport(models.Model):
     name = models.CharField(max_length=50,default='',blank=True, null=True)
 
+    class Meta:
+        verbose_name_plural = "Sport list"
+
     def __str__(self): return self.name
 
 
@@ -45,7 +48,7 @@ class CulturalActivity(models.Model):
     name = models.CharField(max_length=50,default='',blank=True, null=True)
 
     class Meta:
-        verbose_name_plural = "Cultural Activities"
+        verbose_name_plural = "Cultural Activities list"
 
     def __str__(self): return self.name
 
@@ -53,7 +56,7 @@ class SocialActivity(models.Model):
     name = models.CharField(max_length=50,default='',blank=True, null=True)
 
     class Meta:
-        verbose_name_plural = "Social Activities"
+        verbose_name_plural = "Social Activities list"
 
     def __str__(self): return self.name
 
@@ -61,7 +64,7 @@ class Trip(models.Model):
     name = models.CharField(max_length=50,default='',blank=True, null=True)
 
     class Meta:
-        verbose_name_plural = "Trips"
+        verbose_name_plural = "Trips list"
 
     def __str__(self): return self.name
 
@@ -107,6 +110,10 @@ class Resume(models.Model):
     certification = models.CharField(max_length = 100)
     skills = models.CharField(max_length = 100)
     intrests = models.CharField(max_length = 100)
+    submit_date = models.DateTimeField(auto_now_add=True,blank=True, null=True) 
+
+    class Meta:
+        verbose_name_plural = "Student Resumes"
 
     def __str__(self):
         return self.name

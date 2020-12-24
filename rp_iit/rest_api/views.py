@@ -93,7 +93,7 @@ class ListOfCompaniesView(generics.ListAPIView):
 
 class StudentDetailsView(generics.GenericAPIView):
     queryset = Student.objects.all()
-    serializer = StudentProfileSerializer
+    serializer_class = StudentProfileSerializer
 
     def get(self, request, *args, **kwargs):
         if kwargs['key'] == api_key:
@@ -110,7 +110,7 @@ class SportsDetailOfStudentView(generics.GenericAPIView):
     API to get all sports detail of student by slug = session_key
     """
     queryset = Sport.objects.all()
-    serializer = StudentSportDetailSerializer
+    serializer_class = StudentSportDetailSerializer
 
     def get(self, request, *args, **kwargs):
         if kwargs['key'] == api_key:
@@ -129,7 +129,7 @@ class CulturalActivityDetailOfStudentView(generics.GenericAPIView):
     API to get all cultural activity detail of student by slug = session_key
     """
     queryset = CulturalActivity.objects.all()
-    serializer = StudentCulturalActivityDetailSerializer
+    serializer_class = StudentCulturalActivityDetailSerializer
 
     def get(self, request, *args, **kwargs):
         if kwargs['key'] == api_key: 

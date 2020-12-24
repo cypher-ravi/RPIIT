@@ -2,6 +2,8 @@ from django.contrib import admin
 from django.urls import path,include
 from .views import *
 
+app_name = 'rest_api'
+
 urlpatterns = [
     path('announcements/<str:slug>/',AnnouncementListView.as_view()),
     path('departments/',DepartmentListView.as_view()),

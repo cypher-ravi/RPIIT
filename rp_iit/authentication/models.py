@@ -61,6 +61,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default = True)# to check wheather a user is subscribed or not
     is_staff = models.BooleanField(default=False)
     is_verified = models.BooleanField(default=False)
+    registered_date = models.DateTimeField(auto_now_add=True,blank=True, null=True)
 
     is_student = models.BooleanField(default=False)
     
