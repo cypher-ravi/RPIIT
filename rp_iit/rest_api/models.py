@@ -32,6 +32,42 @@ class Announcement(models.Model):
 
     # def get_absolute_url(self):
     #     return reverse("Announcement_detail", kwargs={"pk": self.pk})
+
+
+
+class Sport(models.Model):
+    name = models.CharField(max_length=50,default='',blank=True, null=True)
+
+    def __str__(self): return self.name
+
+
+class CulturalActivity(models.Model):
+    name = models.CharField(max_length=50,default='',blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = "Cultural Activities"
+
+    def __str__(self): return self.name
+
+class SocialActivity(models.Model):
+    name = models.CharField(max_length=50,default='',blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = "Social Activities"
+
+    def __str__(self): return self.name
+
+class Trip(models.Model):
+    name = models.CharField(max_length=50,default='',blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = "Trips"
+
+    def __str__(self): return self.name
+
+
+
+
 class Student(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
     name = models.CharField(max_length=225,default='',blank=True, null=True)
@@ -43,7 +79,13 @@ class Student(models.Model):
     department = models.ForeignKey(Department,on_delete=models.CASCADE)
     semester_or_year = models.CharField(max_length =225,default='',blank=True,null=True)
     profile_submit_date = models.DateTimeField(auto_now_add=True)
+    sports_participanted_in = models.ForeignKey(Sport,on_delete=models.CASCADE,blank=True, null=True)
+    cultural_activities_in = models.ForeignKey(CulturalActivity,on_delete=models.CASCADE,blank=True, null=True)
+    social_activities_in = models.ForeignKey(SocialActivity,on_delete=models.CASCADE,blank=True, null=True)
+    trips_participanted_in = models.ForeignKey(Trip,on_delete=models.CASCADE,blank=True, null=True)
 
+    class Meta:
+        verbose_name_plural = "Student Profiles"
 
     def __str__(self): return self.name
 
@@ -51,6 +93,7 @@ class Student(models.Model):
 
 class Resume(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE,blank=True,null=True)
+    img = models.ImageField(upload_to='Studentresume/img',blank=True,null=True)
     name = models.CharField(max_length = 25)
     father_name = models.CharField(max_length = 25)
     mobile = models.CharField(max_length = 12)
@@ -78,6 +121,5 @@ class PlacementCompany(models.Model):
     added_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self): return self.name
-
 
 

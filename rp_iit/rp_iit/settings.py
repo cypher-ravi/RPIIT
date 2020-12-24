@@ -32,6 +32,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'admin_interface',
+    'colorfield',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_extra_fields',
     'rest_framework_swagger',
+    
     
     
 ]
@@ -153,18 +156,11 @@ REST_FRAMEWORK = {
 AUTH_USER_MODEL = "authentication.User"
 
 
-DJOSER = { 
-    'LOGIN_FIELD':'phone',
-    'SERIALIZERS': {
-        'user_create':'authentication.serializers.UserCreateSerializer',
-        'user':'authentication.serializers.UserCreateSerializer',
-    }
-}
 
 
 SWAGGER_SETTINGS = {
-    'LOGIN_URL': 'A5740DB2B7C1FE79CA9A2FDC8491B2C6/auth/token/login',
-    'LOGOUT_URL': 'A5740DB2B7C1FE79CA9A2FDC8491B2C6/auth/token/logout',
+    'LOGIN_URL': 'A5740DB2B7C1FE79CA9A2FDC8491B2C6/auth/register_and_login',
+    # 'LOGOUT_URL': 'A5740DB2B7C1FE79CA9A2FDC8491B2C6/auth/token/logout',
     'USE_SESSION_AUTH': True,
     'DOC_EXPANSION': 'list',
     'APIS_SORTER': 'alpha',
