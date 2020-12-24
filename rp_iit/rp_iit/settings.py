@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 import os
 # for heroku
-# import django_heroku
+import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -173,5 +173,5 @@ SWAGGER_SETTINGS = {
     'SHOW_REQUEST_HEADERS': True
 }
 
-# django_heroku.settings(locals())
+django_heroku.settings(locals())
     
