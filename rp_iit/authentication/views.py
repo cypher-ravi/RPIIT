@@ -9,6 +9,10 @@ from .serializers import UserCreateAndLoginSerializer as UserSerializer
 from decouple import config
 # Create your views here.
 
+#TODO:
+# 1)encrypt session key
+# 2)review session key storege
+
 api_key = config('api_key')
 
 class UserCreateAndLoginView(generics.GenericAPIView):

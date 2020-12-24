@@ -97,7 +97,7 @@ class StudentDetailsView(generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         if kwargs['key'] == api_key:
-            student_detail = Student.objects.filter(user__session_key = kwargs['pk'])
+            student_detail = Student.objects.filter(user__new_session_key = kwargs['pk'])
             if student_detail.exists():
                 serializer = StudentProfileSerializer(student_detail,many=True)
                 return Response(serializer.data)
@@ -114,7 +114,7 @@ class SportsDetailOfStudentView(generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         if kwargs['key'] == api_key:
-            student = Student.objects.get(user__session_key = kwargs['pk'])
+            student = Student.objects.get(user__new_session_key = kwargs['pk'])
             sports_participanted_in = Sport.objects.filter(student = student)
             if sports_participanted_in.exists():
                 serializer = StudentSportDetailSerializer(sports_participanted_in,many=True)
@@ -133,7 +133,7 @@ class CulturalActivityDetailOfStudentView(generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         if kwargs['key'] == api_key: 
-            student = Student.objects.get(user__session_key = kwargs['pk'])
+            student = Student.objects.get(user__new_session_key = kwargs['pk'])
             cultural_activities_in = CulturalActivity.objects.filter(student = student)
             if cultural_activities_in.exists():
                 serializer = StudentCulturalActivityDetailSerializer(cultural_activities_in,many=True)
@@ -151,7 +151,7 @@ class UpdateStudentProfileView(generics.RetrieveUpdateAPIView):
     """
     queryset = Student.objects.all()
     serializer_class = StudentProfileSerializer
-    lookup_field = 'user__session_key'
+    lookup_field = 'user__new_session_key'
     lookup_url_kwarg = 'pk'
 
 
@@ -161,5 +161,5 @@ class UpdateStudentResumeView(generics.RetrieveUpdateAPIView):
     """
     queryset = Resume.objects.all()
     serializer_class = ResumeUploadSerializer
-    lookup_field = 'user__session_key'
+    lookup_field = 'user__new_session_key'
     lookup_url_kwarg = 'pk'
