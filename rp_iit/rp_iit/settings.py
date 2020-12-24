@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_extra_fields',
     'rest_framework_swagger',
+    'drf_yasg',
     
     
     
