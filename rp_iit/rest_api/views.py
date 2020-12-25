@@ -12,7 +12,7 @@ api_key = config('api_key')
 # Create your views here.
 class AnnouncementListView(generics.GenericAPIView):
     """
-    This API provides list of announcements by providing slug=department name
+    This API provides list of latest announcements ordered by date
     """
     queryset = Announcement.objects.all()
     serializer_class = AnnouncementSerializer
@@ -21,15 +21,12 @@ class AnnouncementListView(generics.GenericAPIView):
         if kwargs['key'] == api_key:
             user = User.objects.filter(phone=request.user)
             if user.exists():
-                if Department.objects.filter(name=kwargs['slug']).exists():
-                    announcements = Announcement.objects.filter(department__name=kwargs['slug']).order_by('-announce_date')
-                    if not announcements:
-                        return Response({'detail':'no announcements'})
-                    else:
-                        serializer = AnnouncementSerializer(announcements,many=True)
-                        return Response(serializer.data,status=status.HTTP_200_OK)  
+                announcements = Announcement.objects.all().order_by('-announce_date')
+                if not announcements:
+                    return Response({'detail':'no announcements'})
                 else:
-                    return Response({'detail':'no such department'})
+                    serializer = AnnouncementSerializer(announcements,many=True)
+                    return Response(serializer.data,status=status.HTTP_200_OK)  
             else:
                 return Response({'detail':'user not exists'})
         return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -97,7 +94,7 @@ class StudentDetailsView(generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         if kwargs['key'] == api_key:
-            student_detail = Student.objects.filter(user__new_session_key = kwargs['pk'])
+            student_detail = Student.objects.filter(user__session_key = kwargs['pk'])
             if student_detail.exists():
                 serializer = StudentProfileSerializer(student_detail,many=True)
                 return Response(serializer.data)
@@ -114,7 +111,7 @@ class SportsDetailOfStudentView(generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         if kwargs['key'] == api_key:
-            student = Student.objects.get(user__new_session_key = kwargs['pk'])
+            student = Student.objects.get(user__session_key = kwargs['pk'])
             sports_participanted_in = Sport.objects.filter(student = student)
             if sports_participanted_in.exists():
                 serializer = StudentSportDetailSerializer(sports_participanted_in,many=True)
@@ -133,7 +130,7 @@ class CulturalActivityDetailOfStudentView(generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         if kwargs['key'] == api_key: 
-            student = Student.objects.get(user__new_session_key = kwargs['pk'])
+            student = Student.objects.get(user__session_key = kwargs['pk'])
             cultural_activities_in = CulturalActivity.objects.filter(student = student)
             if cultural_activities_in.exists():
                 serializer = StudentCulturalActivityDetailSerializer(cultural_activities_in,many=True)
@@ -151,7 +148,7 @@ class UpdateStudentProfileView(generics.RetrieveUpdateAPIView):
     """
     queryset = Student.objects.all()
     serializer_class = StudentProfileSerializer
-    lookup_field = 'user__new_session_key'
+    lookup_field = 'user__session_key'
     lookup_url_kwarg = 'pk'
 
 
@@ -161,5 +158,5 @@ class UpdateStudentResumeView(generics.RetrieveUpdateAPIView):
     """
     queryset = Resume.objects.all()
     serializer_class = ResumeUploadSerializer
-    lookup_field = 'user__new_session_key'
+    lookup_field = 'user__session_key'
     lookup_url_kwarg = 'pk'

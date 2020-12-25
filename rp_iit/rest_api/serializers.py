@@ -38,14 +38,6 @@ class ResumeUploadSerializer(ModelSerializer):
 
         
 
-
- 
-class DepartmentSerializer(ModelSerializer):
-    class Meta:
-        model = Department
-        fields = '__all__'
-
-
 class StudentProfileSerializer(ModelSerializer):
     class Meta:
         model = Student

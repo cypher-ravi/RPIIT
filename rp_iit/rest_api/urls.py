@@ -5,8 +5,7 @@ from .views import *
 app_name = 'rest_api'
 
 urlpatterns = [
-    path('announcements/<str:slug>/',AnnouncementListView.as_view()),
-    path('departments/',DepartmentListView.as_view()),
+    path('announcements/',AnnouncementListView.as_view()),
 
     path('upload_resume/', ResumeUploadView.as_view()),
     path('update_student_resume/<str:pk>', UpdateStudentResumeView.as_view()),

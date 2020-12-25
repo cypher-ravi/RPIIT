@@ -34,9 +34,9 @@ class UserRegisterView(generics.GenericAPIView):
                 return Response({'detail':serializer.errors})
             else:
                 if db_user[0].is_verified and db_user[0].is_student:
-                    user.session_key = request.data['session_key']
-                    user.save()
-                    login(request,user)
+                    db_user[0].session_key = request.data['session_key']
+                    db_user[0].save()
+                    login(request,db_user[0])
                     return Response({'logged_in':True},status= status.HTTP_200_OK)
                 return Response({'is_student':db_user[0].is_student},status= status.HTTP_200_OK)
         return Response({'detail':'wrong api key'})
