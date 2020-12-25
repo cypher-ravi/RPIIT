@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login,logout
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .models import User
-from .serializers import UserCreateAndLoginSerializer as UserSerializer,LoginSerializer
+from .serializers import UserCreateAndLoginSerializer as UserSerializer
 from decouple import config
 # Create your views here.
 
@@ -14,7 +14,7 @@ api_key = config('api_key')
 
 class UserRegisterView(generics.GenericAPIView):
     """
-    Register API
+    Register and Login API
     """
 
     queryset = User.objects.all()
@@ -32,33 +32,17 @@ class UserRegisterView(generics.GenericAPIView):
                     serializer.save(is_verified=True)
                     return Response({'detail':serializer.data,'is_student':False},status= status.HTTP_201_CREATED)
                 return Response({'detail':serializer.errors})
-            return Response({'detail':'already user','is_student':db_user[0].is_student})
+            else:
+                if db_user[0].is_verified and db_user[0].is_student:
+                    user.session_key = request.data['session_key']
+                    user.save()
+                    login(request,user)
+                    return Response({'logged_in':True},status= status.HTTP_200_OK)
+                return Response({'is_student':db_user[0].is_student},status= status.HTTP_200_OK)
         return Response({'detail':'wrong api key'})
 
 
-class LoginView(generics.GenericAPIView):
-    """
-    Login API
-    """
-    queryset = User.objects.all()
-    serializer_class = LoginSerializer
 
-    def post(self, request, *args, **kwargs):
-        if kwargs['key'] == api_key:
-            db_user = User.objects.filter(phone=request.data['phone'])
-            if db_user:
-                for user in db_user:
-                    if user.session_key == request.data['session_key']:
-                        if db_user[0].is_verified and db_user[0].is_student:
-                            user.new_session_key = request.data['new_session_key']
-                            user.session_key = user.new_session_key
-                            user.save()
-                            login(request,user)
-                            return Response({'logged_in':True},status= status.HTTP_200_OK)
-                        return Response({'is_student':user.is_student},status= status.HTTP_200_OK)
-                    return Response({'previous session key not matched'})
-            return Response({'details':'user not exists'})
-        return Response({'detail':'wrong api key'})
 
 
 

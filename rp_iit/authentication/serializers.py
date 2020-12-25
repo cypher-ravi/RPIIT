@@ -10,8 +10,3 @@ class UserCreateAndLoginSerializer(serializers.ModelSerializer):
         fields = ['phone','session_key']
 
  
-class LoginSerializer(serializers.ModelSerializer):
-    session_key = serializers.CharField()
-    class Meta:
-        model = User
-        fields = ['phone','session_key','new_session_key']

@@ -56,8 +56,7 @@ class User(AbstractBaseUser, PermissionsMixin):
                   message= "Phone number must be entered in format: '+9999999999'. Up to 14 digits allowed. ")
     phone = models.CharField(validators=[phone_regex], max_length=15, unique=True)
     
-    session_key = models.CharField(max_length=64, unique=True, blank=True,null=True)
-    new_session_key = models.CharField(max_length=64, unique=True, blank=True,null=True)
+    session_key = models.CharField(max_length=64, unique=True, blank=True,null=True)  
     is_active = models.BooleanField(default = True)# to check wheather a user is subscribed or not
     is_staff = models.BooleanField(default=False)
     is_verified = models.BooleanField(default=False)
