@@ -30,13 +30,6 @@ class AnnouncementListView(generics.GenericAPIView):
             else:
                 return Response({'detail':'user not exists'})
         return Response(status=status.HTTP_400_BAD_REQUEST)
-    
-class DepartmentListView(generics.ListAPIView):
-    """
-    List of departments
-    """
-    queryset = Department.objects.all()
-    serializer_class = DepartmentSerializer
 
     
 class ResumeUploadView(generics.GenericAPIView):
