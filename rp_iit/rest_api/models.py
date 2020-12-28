@@ -16,7 +16,7 @@ class Department(models.Model):
 
 
 class Announcement(models.Model):
-    department = models.ForeignKey(Department,on_delete=models.CASCADE)
+    department = models.ForeignKey(Department,on_delete=models.CASCADE,blank=True, null=True)
     announce_date = models.DateTimeField()
     title = models.CharField(max_length=100,default='')
     description = models.TextField(default='')
@@ -35,39 +35,6 @@ class Announcement(models.Model):
 
 
 
-class Sport(models.Model):
-    name = models.CharField(max_length=50,default='',blank=True, null=True)
-
-    class Meta:
-        verbose_name_plural = "Sport list"
-
-    def __str__(self): return self.name
-
-
-class CulturalActivity(models.Model):
-    name = models.CharField(max_length=50,default='',blank=True, null=True)
-
-    class Meta:
-        verbose_name_plural = "Cultural Activities list"
-
-    def __str__(self): return self.name
-
-class SocialActivity(models.Model):
-    name = models.CharField(max_length=50,default='',blank=True, null=True)
-
-    class Meta:
-        verbose_name_plural = "Social Activities list"
-
-    def __str__(self): return self.name
-
-class Trip(models.Model):
-    name = models.CharField(max_length=50,default='',blank=True, null=True)
-
-    class Meta:
-        verbose_name_plural = "Trips list"
-
-    def __str__(self): return self.name
-
 
 
 
@@ -79,13 +46,9 @@ class Student(models.Model):
     email = models.EmailField()
     address = models.CharField(max_length= 1000,default='',blank=True,null=True)
     age = models.IntegerField()
-    department = models.ForeignKey(Department,on_delete=models.CASCADE)
+    department = models.ForeignKey(Department,on_delete=models.CASCADE,blank=True, null=True)
     semester_or_year = models.CharField(max_length =225,default='',blank=True,null=True)
     profile_submit_date = models.DateTimeField(auto_now_add=True)
-    sports_participanted_in = models.ForeignKey(Sport,on_delete=models.CASCADE,blank=True, null=True)
-    cultural_activities_in = models.ForeignKey(CulturalActivity,on_delete=models.CASCADE,blank=True, null=True)
-    social_activities_in = models.ForeignKey(SocialActivity,on_delete=models.CASCADE,blank=True, null=True)
-    trips_participanted_in = models.ForeignKey(Trip,on_delete=models.CASCADE,blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "Student Profiles"
@@ -94,9 +57,63 @@ class Student(models.Model):
 
 
 
+class Sport(models.Model):
+    student = models.ManyToManyField(Student,blank=True)
+    name = models.CharField(max_length=50,default='',blank=True, null=True)
+    date = models.DateField(blank=True, null=True)
+    time  = models.TimeField(auto_now=False, auto_now_add=False)
+    venue = models.CharField(max_length=225,default='',blank=True, null=True)
+    img = models.ImageField(upload_to='Sportevents/img',blank=True, null=True)
+    co_ordinator = models.CharField(max_length=120,default='',blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = "Sport list"
+
+    def __str__(self): return self.name
+
+
+class CulturalActivity(models.Model):
+    student = models.ManyToManyField(Student,blank=True)
+    name = models.CharField(max_length=50,default='',blank=True, null=True)
+    date = models.DateField(blank=True, null=True)
+    time  = models.TimeField(auto_now=False, auto_now_add=False)
+    venue = models.CharField(max_length=225,default='',blank=True, null=True)
+    img = models.ImageField(upload_to='Cultural_activity/img',blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = "Cultural Activities list"
+
+    def __str__(self): return self.name
+
+class SocialActivity(models.Model):
+    student = models.ManyToManyField(Student,blank=True)
+    name = models.CharField(max_length=50,default='',blank=True, null=True)
+    date = models.DateField(blank=True, null=True)
+    time  = models.TimeField(auto_now=False, auto_now_add=False)
+    img = models.ImageField(upload_to='Social_activity/img',blank=True, null=True)
+    co_ordinator = models.CharField(max_length=120,default='',blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = "Social Activities list"
+
+    def __str__(self): return self.name
+
+class Trip(models.Model):
+    student = models.ManyToManyField(Student,blank=True)
+    name = models.CharField(max_length=50,default='',blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = "Trips list"
+
+    def __str__(self): return self.name
+
+
+
+
 class Resume(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE,blank=True,null=True)
-    img = models.ImageField(upload_to='Studentresume/img',blank=True,null=True)
+    img = models.CharField(max_length=1000,default='',blank=True,null=True)
     name = models.CharField(max_length = 25)
     father_name = models.CharField(max_length = 25)
     mobile = models.CharField(max_length = 12)

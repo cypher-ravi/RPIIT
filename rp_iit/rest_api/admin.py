@@ -46,3 +46,7 @@ class CultutralAdmin(admin.ModelAdmin):
 @admin.register(Trip)
 class TripAdmin(admin.ModelAdmin):
     list_display = ('name',) 
+
+@admin.register(SocialActivity)
+class TripAdmin(admin.ModelAdmin):
+    list_display = ('name',) 
