@@ -8,7 +8,7 @@ from decouple import config
 api_key = config('api_key')
 
 @api_view(['GET'])
-def index(request,slug):
+def index(request,key):
     if key == api_key:
         date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         message = 'Server is live current time is'
