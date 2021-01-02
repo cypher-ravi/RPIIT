@@ -39,7 +39,7 @@ class Announcement(models.Model):
 
 
 class Student(models.Model):
-    user = models.OneToOneField(User,on_delete=models.CASCADE,blank=True, null=True)
+    user = models.ForeignKey(User,on_delete=models.CASCADE,blank=True, null=True)
     name = models.CharField(max_length=225,default='',blank=True, null=True)
     father_name = models.CharField(max_length=225,default='',blank=True, null=True)
     mobile_number = models.CharField(max_length=14,default='',blank=True,null=True)
@@ -111,21 +111,21 @@ class Trip(models.Model):
 
 
 class Resume(models.Model):
-    user = models.OneToOneField(User,on_delete=models.CASCADE,blank=True,null=True)
+    user = models.ForeignKey(User,on_delete=models.CASCADE,blank=True,null=True)
     img = models.CharField(max_length=1000,default='',blank=True,null=True)
     name = models.CharField(max_length = 25)
     father_name = models.CharField(max_length = 25)
-    mobile = models.CharField(max_length = 12)
-    email = models.EmailField()
-    address = models.TextField()
-    h_qualification = models.TextField()
-    trade = models.CharField(max_length = 25)
-    work_experience = models.TextField()
-    projects = models.TextField()
-    achivement = models.TextField()
-    certification = models.CharField(max_length = 100)
-    skills = models.CharField(max_length = 100)
-    intrests = models.CharField(max_length = 100)
+    mobile = models.CharField(max_length = 12,default='',blank=True, null=True)
+    email = models.CharField(max_length = 120,default='',blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+    h_qualification = models.TextField(blank=True, null=True)
+    trade = models.CharField(max_length = 25,default='',blank=True, null=True)
+    work_experience = models.TextField(blank=True, null=True)
+    projects = models.TextField(blank=True, null=True)
+    achivement = models.TextField(blank=True, null=True)
+    certification = models.CharField(max_length = 100,default='',blank=True, null=True)
+    skills = models.CharField(max_length = 100,blank=True,null=True)
+    intrests = models.CharField(max_length = 100,blank=True,null=True)
     submit_date = models.DateTimeField(auto_now_add=True,blank=True, null=True) 
 
     class Meta:

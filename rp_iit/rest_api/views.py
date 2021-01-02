@@ -37,12 +37,21 @@ class ResumeUploadView(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         if kwargs['key'] == api_key:
-            serializer = ResumeUploadSerializer(data = request.data)
-            if serializer.is_valid(raise_exception=True):
-                serializer.save()
-                return Response({'resp': 'Your Resume Uploaded Successfully','data':serializer.data})
-            else:
-                return Response({'resp':serializer.errors})
+            user = User.objects.get(id=kwargs['pk'])
+            if user !=None:
+                try:
+                    resume = Resume.objects.get(user=user)
+                except:
+                    resume = Resume.objects.none()
+                if not resume:
+                    serializer = ResumeUploadSerializer(data=request.data)
+                    if serializer.is_valid(raise_exception=True):
+                        serializer.save(user=user)
+                        return Response({'detail':'Resume created'},status=status.HTTP_201_CREATED)
+                    return Response({'detail':serializer.errors},status=status.HTTP_400_BAD_REQUEST)    
+                else:
+                    return Response({'resume already exists'})
+            return Response({'details':'user not exists'})
         else:
             return Response({'details':'wrong api key'})
     
@@ -57,13 +66,20 @@ class StudentProfileView(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         if kwargs['key'] == api_key:
-            user = User.objects.filter(id=request.user)
-            if user.exists():
-                serializer = StudentProfileSerializer(data=request.data)
-                if serializer.is_valid(raise_exception=True):
-                    serializer.save(user=request.user)
-                    return Response({'detail':'Student Profile created','data':user[0].session_key},status=status.HTTP_201_CREATED)
-                return Response({'detail':serializer.errors},status=status.HTTP_400_BAD_REQUEST)    
+            user = User.objects.get(id=kwargs['pk'])
+            if user !=None:
+                try:
+                    profile = Student.objects.get(user=user)
+                except:
+                    profile = Student.objects.none()
+                if not profile:
+                    serializer = StudentProfileSerializer(data=request.data)
+                    if serializer.is_valid(raise_exception=True):
+                        serializer.save(user=user)
+                        return Response({'detail':'Student Profile created','data':user.session_key},status=status.HTTP_201_CREATED)
+                    return Response({'detail':serializer.errors},status=status.HTTP_400_BAD_REQUEST)    
+                else:
+                    return Response({'profile already exists'})
             return Response({'details':'user not exists'})
         return Response({'detail':'wrong api key'})
 

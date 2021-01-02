@@ -23,7 +23,7 @@ class ResumeUploadSerializer(ModelSerializer):
     img = SerializerMethodField(method_name='get_img')
     class Meta:
         model = Resume
-        fields = '__all__'
+        exclude = ['user']
     
     def get_img(self,obj):
         try:              
@@ -40,7 +40,7 @@ class ResumeUploadSerializer(ModelSerializer):
 class StudentProfileSerializer(ModelSerializer):
     class Meta:
         model = Student
-        fields = '__all__'
+        exclude = ['user']
        
 
 class PlacementCompanySerializer(ModelSerializer):
