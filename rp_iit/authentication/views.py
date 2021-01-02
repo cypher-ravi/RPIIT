@@ -30,15 +30,15 @@ class UserRegisterView(generics.GenericAPIView):
                 serializer = UserSerializer(data=request.data)
                 if serializer.is_valid(raise_exception=True):
                     serializer.save(is_verified=True)
-                    return Response((serializer.data,False),status= status.HTTP_201_CREATED)
+                    return Response((serializer.data['id']),status= status.HTTP_201_CREATED)
                 return Response({'detail':serializer.errors})
             else:
-                if db_user[0].is_verified and db_user[0].is_student:
+                if db_user[0].is_verified:
                     db_user[0].session_key = request.data['session_key']
                     db_user[0].save()
                     login(request,db_user[0])
                     return Response({'logged_in':True},status= status.HTTP_200_OK)
-                return Response((db_user[0].id,db_user[0].is_student),status= status.HTTP_200_OK)
+                return Response((db_user[0].id),status= status.HTTP_200_OK)
         return Response({'detail':'wrong api key'})
 
 
