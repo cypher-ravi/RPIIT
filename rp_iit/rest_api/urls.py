@@ -7,11 +7,11 @@ app_name = 'rest_api'
 urlpatterns = [
     path('announcements/',AnnouncementListView.as_view()),
 
-    path('upload_resume/', ResumeUploadView.as_view()),
+    path('upload_resume/<str:pk>', ResumeUploadView.as_view()),
     path('update_student_resume/<str:pk>', UpdateStudentResumeView.as_view()),
     
     
-    path('student_profile/', StudentProfileView.as_view()),
+    path('student_profile/<str:pk>', StudentProfileView.as_view()),
     path('update_student_profile/<str:pk>', UpdateStudentProfileView.as_view()),
 
     path('student_detail/<str:pk>', StudentDetailsView.as_view()),
