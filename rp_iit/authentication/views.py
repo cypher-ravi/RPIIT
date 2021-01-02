@@ -37,7 +37,7 @@ class UserRegisterView(generics.GenericAPIView):
                     db_user[0].session_key = request.data['session_key']
                     db_user[0].save()
                     login(request,db_user[0])
-                    return Response({'logged_in':True},status= status.HTTP_200_OK)
+                    return Response((db_user[0].id),status= status.HTTP_200_OK)
                 return Response((db_user[0].id),status= status.HTTP_200_OK)
         return Response({'detail':'wrong api key'})
 
