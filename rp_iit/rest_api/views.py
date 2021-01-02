@@ -245,6 +245,22 @@ class ListOfCompaniesView(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         if kwargs['key'] == api_key: 
             companies = PlacementCompany.objects.all()
-            serializer = PlacementCompanySerializer(companies,many=True)
+            serializer = PlacementCompanySerializer(companies,many=True,context={"request": request})
+            return Response(serializer.data)
+        return Response({'detail':'wrong api key'})
+
+
+
+class ListOfTripView(generics.ListAPIView):
+    """
+    List of Trips
+    """
+    queryset = Trip.objects.all()
+    serializer_class = TripListSerializer
+
+    def get(self, request, *args, **kwargs):
+        if kwargs['key'] == api_key: 
+            trips = Trip.objects.all()
+            serializer = TripListSerializer(trips,many=True,context={"request": request})
             return Response(serializer.data)
         return Response({'detail':'wrong api key'})

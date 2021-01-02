@@ -23,6 +23,7 @@ urlpatterns = [
     path('list_of_cultural_activties/', CulturalActivityList.as_view()),
     path('list_of_social_activties/', SocialActivityList.as_view()),
     path('list_of_sport_events/', SportEventsList.as_view()),
+    path('list_of_trips/', ListOfTripView.as_view()),
     
 
 
