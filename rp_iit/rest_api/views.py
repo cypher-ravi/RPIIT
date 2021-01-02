@@ -194,7 +194,7 @@ class CulturalActivityList(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         if kwargs['key'] == api_key: 
-            cultural_activities_in = CulturalActivity.objects.all().order_by('-date')
+            cultural_activities_in = CulturalActivity.objects.all()
             serializer = CulturalActivityListSerializer(cultural_activities_in,many=True,context={"request": request})
             return Response(serializer.data)
         else:
