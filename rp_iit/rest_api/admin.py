@@ -17,7 +17,7 @@ class Department(admin.ModelAdmin):
   
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
-    list_display = ('name','father_name','email','user','department')
+    list_display = ('name','father_name','email','user',)
     list_filter = ('profile_submit_date' ,'age' )
     search_fields = ('name','user__phone',)
 

@@ -39,14 +39,13 @@ class Announcement(models.Model):
 
 
 class Student(models.Model):
-    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    user = models.OneToOneField(User,on_delete=models.CASCADE,blank=True, null=True)
     name = models.CharField(max_length=225,default='',blank=True, null=True)
     father_name = models.CharField(max_length=225,default='',blank=True, null=True)
     mobile_number = models.CharField(max_length=14,default='',blank=True,null=True)
-    email = models.EmailField()
+    email = models.CharField(max_length=225,default='',blank=True,null=True)
     address = models.CharField(max_length= 1000,default='',blank=True,null=True)
-    age = models.IntegerField()
-    department = models.ForeignKey(Department,on_delete=models.CASCADE,blank=True, null=True)
+    age = models.CharField(max_length=20,default='',blank=True,null=True)
     semester_or_year = models.CharField(max_length =225,default='',blank=True,null=True)
     profile_submit_date = models.DateTimeField(auto_now_add=True)
 
