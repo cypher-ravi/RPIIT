@@ -101,6 +101,7 @@ class SocialActivity(models.Model):
 class Trip(models.Model):
     student = models.ManyToManyField(Student,blank=True)
     name = models.CharField(max_length=50,default='',blank=True, null=True)
+    img = models.ImageField(upload_to='Trip/img',blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "Trips list"
@@ -142,6 +143,7 @@ class PlacementCompany(models.Model):
     city = models.CharField(max_length = 25,default='')
     state = models.CharField(max_length =25,default='')
     added_date = models.DateTimeField(auto_now_add=True)
+    img = models.ImageField(upload_to='Social_activity/img',blank=True, null=True)
 
     def __str__(self): return self.name
 
