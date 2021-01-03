@@ -8,6 +8,7 @@ from rest_framework.response import Response
 
 from .models import Announcement, Department, PlacementCompany, Resume, Student
 from .serializers import *
+from django.utils import timezone
 
 api_key = config('api_key')
 
@@ -267,4 +268,35 @@ class ListOfTripView(generics.ListAPIView):
             trips = Trip.objects.all()
             serializer = TripListSerializer(trips,many=True,context={"request": request})
             return Response(serializer.data)
+        return Response({'detail':'wrong api key'})
+
+
+
+class ListOfPastEventsView(generics.ListAPIView):
+    """
+    List Of all past events including cultural activities,social activities,sport activities,trip events
+    """
+    queryset = CulturalActivity.objects.all()
+    serializer_class = CulturalActivityListSerializer
+
+    def get(self, request, *args, **kwargs):
+        if kwargs['key'] == api_key: 
+            # trips = Trip.objects.all()
+            # serializer = TripListSerializer(trips,many=True,context={"request": request})
+            # return Response(serializer.data)
+            now = timezone.now()
+            cultural_activity= CulturalActivity.objects.filter(date__lt=now)
+            serialize_cultural_activity = CulturalActivityListSerializer(cultural_activity,many=True,context={"request": request})
+
+            social_activity_list = SocialActivity.objects.filter(date__lt=now)
+            serialize_social_activity = SocialActivityListSerializer(social_activity_list,many=True,context={"request": request})
+
+            sports_activity_list = Sport.objects.filter(date__lt=now)
+            serialize_sports_activity = SportListSerializer(sports_activity_list,many=True,context={"request": request})
+
+            trip_list = Trip.objects.filter(date__lt=now)
+            serialize_trip_list = TripListSerializer(trip_list,many=True,context={"request": request})
+
+            return Response((serialize_cultural_activity.data,serialize_social_activity.data,serialize_sports_activity.data,serialize_trip_list.data))
+            
         return Response({'detail':'wrong api key'})

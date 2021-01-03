@@ -27,5 +27,6 @@ urlpatterns = [
     
 
 
+    path('list_of_past_events/', ListOfPastEventsView.as_view()),
 
 ]
