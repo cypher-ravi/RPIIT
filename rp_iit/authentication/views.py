@@ -1,14 +1,16 @@
-from rest_framework.decorators import api_view
+from decouple import config
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
+# Create your views here.
+from django.views.decorators.csrf import csrf_exempt
+
 from rest_framework import generics, status
-from django.contrib.auth import authenticate, login,logout
-from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
 from .models import User
 from .serializers import UserCreateAndLoginSerializer as UserSerializer
-from decouple import config
-# Create your views here.
-
 
 api_key = config('api_key')
 
@@ -20,6 +22,7 @@ class UserRegisterView(generics.GenericAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+    @csrf_exempt
     def post(self, request, *args, **kwargs):
         if kwargs['key'] == api_key:
             db_user = User.objects.filter(phone=request.data['phone'])

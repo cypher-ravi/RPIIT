@@ -50,7 +50,7 @@ class ResumeUploadView(generics.GenericAPIView):
                     serializer = ResumeUploadSerializer(data=request.data)
                     if serializer.is_valid(raise_exception=True):
                         serializer.save(user=user)
-                        return Response({'detail':'Resume created','id':user.id},status=status.HTTP_201_CREATED)
+                        return Response({'detail':'Resume created'},status=status.HTTP_201_CREATED)
                     return Response({'detail':serializer.errors},status=status.HTTP_400_BAD_REQUEST)    
                 else:
                     return Response({'resume already exists'})
@@ -80,7 +80,7 @@ class StudentProfileView(generics.GenericAPIView):
                     serializer = StudentProfileSerializer(data=request.data)
                     if serializer.is_valid(raise_exception=True):
                         serializer.save(user=user)
-                        return Response({'detail':'Student Profile created','id':user.id},status=status.HTTP_201_CREATED)
+                        return Response({'detail':'Student Profile created'},status=status.HTTP_201_CREATED)
                     return Response({'detail':serializer.errors},status=status.HTTP_400_BAD_REQUEST)    
                 else:
                     return Response({'profile already exists'})
