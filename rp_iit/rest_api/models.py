@@ -131,6 +131,8 @@ class Resume(models.Model):
     certification = models.CharField(max_length = 100,default='',blank=True, null=True)
     skills = models.CharField(max_length = 100,blank=True,null=True)
     intrests = models.CharField(max_length = 100,blank=True,null=True)
+    d_o_b = models.CharField(max_length = 100,blank=True,null=True)
+    langauages = models.CharField(max_length = 225,blank=True,null=True)
     submit_date = models.DateTimeField(auto_now_add=True,blank=True, null=True) 
 
     class Meta:
