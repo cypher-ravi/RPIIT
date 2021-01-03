@@ -1,11 +1,13 @@
-from authentication.models import User
+from decouple import config
 from django.shortcuts import get_list_or_404, render
+from django.views.decorators.csrf import csrf_exempt
+
+from authentication.models import User
 from rest_framework import generics, mixins, status, viewsets
 from rest_framework.response import Response
 
 from .models import Announcement, Department, PlacementCompany, Resume, Student
 from .serializers import *
-from decouple import config
 
 api_key = config('api_key')
 
@@ -35,6 +37,7 @@ class ResumeUploadView(generics.GenericAPIView):
     queryset = Resume.objects.all()
     serializer_class = ResumeUploadSerializer
 
+    @csrf_exempt
     def post(self, request, *args, **kwargs):
         if kwargs['key'] == api_key:
             user = User.objects.get(id=kwargs['pk'])
@@ -47,7 +50,7 @@ class ResumeUploadView(generics.GenericAPIView):
                     serializer = ResumeUploadSerializer(data=request.data)
                     if serializer.is_valid(raise_exception=True):
                         serializer.save(user=user)
-                        return Response({'detail':'Resume created'},status=status.HTTP_201_CREATED)
+                        return Response({'detail':'Resume created','id':user.id},status=status.HTTP_201_CREATED)
                     return Response({'detail':serializer.errors},status=status.HTTP_400_BAD_REQUEST)    
                 else:
                     return Response({'resume already exists'})
@@ -64,6 +67,7 @@ class StudentProfileView(generics.GenericAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentProfileSerializer
 
+    @csrf_exempt
     def post(self, request, *args, **kwargs):
         if kwargs['key'] == api_key:
             user = User.objects.get(id=kwargs['pk'])
@@ -76,7 +80,7 @@ class StudentProfileView(generics.GenericAPIView):
                     serializer = StudentProfileSerializer(data=request.data)
                     if serializer.is_valid(raise_exception=True):
                         serializer.save(user=user)
-                        return Response({'detail':'Student Profile created','data':user.session_key},status=status.HTTP_201_CREATED)
+                        return Response({'detail':'Student Profile created','id':user.id},status=status.HTTP_201_CREATED)
                     return Response({'detail':serializer.errors},status=status.HTTP_400_BAD_REQUEST)    
                 else:
                     return Response({'profile already exists'})
