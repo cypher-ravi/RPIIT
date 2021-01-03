@@ -102,6 +102,10 @@ class Trip(models.Model):
     student = models.ManyToManyField(Student,blank=True)
     name = models.CharField(max_length=50,default='',blank=True, null=True)
     img = models.ImageField(upload_to='Trip/img',blank=True, null=True)
+    date = models.DateField(blank=True, null=True)
+    time  = models.TimeField(auto_now_add=False,blank=True, null=True)
+    venue = models.CharField(max_length=225,default='',blank=True, null=True)
+    charges = models.CharField(max_length=225,default='',blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "Trips list"
