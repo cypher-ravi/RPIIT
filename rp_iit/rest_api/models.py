@@ -152,7 +152,7 @@ class Resume(models.Model):
         verbose_name_plural = "Student Resumes"
 
     def __str__(self):
-        return self.name
+        return f'{self.name} +{self.mobile}'
 
 
 class PlacementCompany(models.Model):
