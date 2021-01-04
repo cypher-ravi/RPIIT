@@ -47,7 +47,7 @@ class PlacementCompanySerializer(ModelSerializer):
     img = SerializerMethodField(method_name='get_photo_url')
     class Meta:
         model = PlacementCompany
-        fields = '__all__'
+        exclude = ['user']
 
 
     def get_photo_url(self, obj):
@@ -175,3 +175,16 @@ class TripListSerializer(ModelSerializer):
             return request.build_absolute_uri(photo_url)
         except:
             return None
+
+
+
+class StudentInfoSerializer(ModelSerializer):
+    class Meta:
+        model = Student
+        fields = '__all__'
+        
+
+class ApplyJobViewSerializer(ModelSerializer):
+    class Meta:
+        model = AppliedJob
+        fields = ['company_id','user_id']

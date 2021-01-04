@@ -63,6 +63,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     registered_date = models.DateTimeField(auto_now_add=True,blank=True, null=True)
 
     is_student = models.BooleanField(default=False)
+    fcm_token = models.CharField(max_length=500,default='',blank=True, null=True)
     
     
     USERNAME_FIELD = 'phone'

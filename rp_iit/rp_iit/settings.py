@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_api',
     'authentication',
+    
 
     #third party libraries
     'rest_framework',
@@ -175,3 +176,4 @@ SWAGGER_SETTINGS = {
 
 # django_heroku.settings(locals())
     
+FCM_SERVER_KEY="[AAAAcJkoZ-I:APA91bE2NWUD-Q5O5MB8gQaLnN9cQ72hw3T_micRtdO1qPb6qSzGDJhx3iyVJyKqOTsuQujwVt04zG2MPunMmkARVTERoPVGgSI47RSCnBBSwkAZRIzim1xrbvO00Dl3oHeLjnIqTQ_q]"

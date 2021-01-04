@@ -1,5 +1,7 @@
 from django.db import models
 from authentication.models import User
+from django.db.models.signals import post_save
+from pyfcm import FCMNotification
 # Create your models here.
 
 class Department(models.Model):
@@ -35,6 +37,17 @@ class Announcement(models.Model):
 
 
 
+def announcement_create(sender, instance, created, **kwargs):
+    print('signal working')
+    path_to_fcm = "https://fcm.googleapis.com"
+    server_key = 'AAAAcJkoZ-I:APA91bE2NWUD-Q5O5MB8gQaLnN9cQ72hw3T_micRtdO1qPb6qSzGDJhx3iyVJyKqOTsuQujwVt04zG2MPunMmkARVTERoPVGgSI47RSCnBBSwkAZRIzim1xrbvO00Dl3oHeLjnIqTQ_q'
+    message_title = "test notification"
+    message_body = "Hi abhinav sir,notification Rocks!"
+    result = FCMNotification(api_key=server_key).notify_single_device(registration_id='v3fLIqD2bEZdpwAOEXAFKJRUyzb2',message_title=message_title, message_body=message_body)
+
+
+
+post_save.connect(announcement_create, sender=Announcement)
 
 
 
@@ -143,6 +156,7 @@ class Resume(models.Model):
 
 
 class PlacementCompany(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE,blank=True, null=True)
     name = models.CharField(max_length =50)
     description = models.TextField()
     address = models.CharField(max_length = 225,default='')
@@ -154,3 +168,8 @@ class PlacementCompany(models.Model):
     def __str__(self): return self.name
 
 
+class AppliedJob(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE,blank=True, null=True)
+    company = models.ForeignKey(PlacementCompany,on_delete=models.CASCADE,blank=True, null=True)
+
+    def __str__(self): return "user id " + str(self.user.id)+ ' applied for '+ str(self.company.name)

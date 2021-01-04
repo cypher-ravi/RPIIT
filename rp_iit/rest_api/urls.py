@@ -29,4 +29,7 @@ urlpatterns = [
 
     path('list_of_past_events/', ListOfPastEventsView.as_view()),
 
+    path('student_info/<str:user_id>', StudentInfoView.as_view()),
+
+    path('apply_job/<str:pk>/<str:company_id>', ApplyJobView.as_view()),#apply job
 ]

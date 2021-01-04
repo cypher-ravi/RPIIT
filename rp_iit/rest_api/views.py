@@ -300,3 +300,61 @@ class ListOfPastEventsView(generics.ListAPIView):
             return Response((serialize_cultural_activity.data,serialize_social_activity.data,serialize_sports_activity.data,serialize_trip_list.data))
             
         return Response({'detail':'wrong api key'})
+
+
+
+class StudentInfoView(generics.RetrieveAPIView):
+    queryset = Student.objects.all()
+    serializer_class = StudentInfoSerializer()
+
+    def get(self,request, *args,**kwargs):
+
+        if kwargs['key'] == api_key: 
+            user = User.objects.filter(id=kwargs['user_id'])
+            if not user.exists():
+                return Response({'user no exists'})
+            else:
+                
+                profile = Student.objects.filter(user=user[0])
+                resume = Resume.objects.filter(user=user[0])
+
+                if not  profile:
+                    is_student = False
+                else:
+                    is_student = True
+
+
+                if not resume:
+                    resume_submission = False
+                else:
+                    resume_submission = True
+
+                return Response({'user_id':user[0].id,'student':is_student,'resume':resume_submission})
+
+
+class ApplyJobView(generics.GenericAPIView):
+    queryset = AppliedJob.objects.all()
+    serializer_class = ApplyJobViewSerializer
+
+    def post(self, request, *args, **kwargs):
+        if kwargs['key'] == api_key:
+            user = User.objects.filter(id=kwargs['pk'])
+
+            if user.exists():
+                if not AppliedJob.objects.filter(user=user[0]).exists():
+                    company = PlacementCompany.objects.filter(id=kwargs['company_id'])
+                    if company:
+                        data = {
+                            'company': company,
+                            'user': user
+                        }
+                        serializer = ApplyJobViewSerializer(data=data)
+                        if serializer.is_valid(raise_exception=True):
+                            serializer.save(user=user[0],company=company[0])
+                            return Response({'detail':'job applied successfully'})
+                        return Response(serializer.errors)
+                    else:
+                        return Response({'detail':'company not found'})
+                else:return Response({'detail':'user already applied for this company'})
+            else:return Response({'detail':'user not exists'})
+        return Response({'wrong api key'})
