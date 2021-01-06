@@ -271,38 +271,6 @@ class ListOfTripView(generics.ListAPIView):
         return Response({'detail':'wrong api key'})
 
 
-
-class ListOfPastEventsView(generics.ListAPIView):
-    """
-    List Of all past events including cultural activities,social activities,sport activities,trip events
-    """
-    queryset = CulturalActivity.objects.all()
-    serializer_class = CulturalActivityListSerializer
-
-    def get(self, request, *args, **kwargs):
-        if kwargs['key'] == api_key: 
-            # trips = Trip.objects.all()
-            # serializer = TripListSerializer(trips,many=True,context={"request": request})
-            # return Response(serializer.data)
-            now = timezone.now()
-            cultural_activity= CulturalActivity.objects.filter(date__lt=now)
-            serialize_cultural_activity = CulturalActivityListSerializer(cultural_activity,many=True,context={"request": request})
-
-            social_activity_list = SocialActivity.objects.filter(date__lt=now)
-            serialize_social_activity = SocialActivityListSerializer(social_activity_list,many=True,context={"request": request})
-
-            sports_activity_list = Sport.objects.filter(date__lt=now)
-            serialize_sports_activity = SportListSerializer(sports_activity_list,many=True,context={"request": request})
-
-            trip_list = Trip.objects.filter(date__lt=now)
-            serialize_trip_list = TripListSerializer(trip_list,many=True,context={"request": request})
-
-            return Response((serialize_cultural_activity.data,serialize_social_activity.data,serialize_sports_activity.data,serialize_trip_list.data))
-            
-        return Response({'detail':'wrong api key'})
-
-
-
 class StudentInfoView(generics.RetrieveAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentInfoSerializer()
@@ -310,7 +278,7 @@ class StudentInfoView(generics.RetrieveAPIView):
     def get(self,request, *args,**kwargs):
 
         if kwargs['key'] == api_key: 
-            user = User.objects.filter(id=kwargs['user_id'])
+            user = User.objects.filter(phone=kwargs['phone'])
             if not user.exists():
                 return Response({'user no exists'})
             else:
@@ -332,7 +300,7 @@ class StudentInfoView(generics.RetrieveAPIView):
                 return Response({'user_id':user[0].id,'student':is_student,'resume':resume_submission})
 
 
-class ApplyJobView(generics.GenericAPIView):
+class ApplyJobView(generics.GenericAPIView,mixins.DestroyModelMixin):
     queryset = AppliedJob.objects.all()
     serializer_class = ApplyJobViewSerializer
 
@@ -358,3 +326,127 @@ class ApplyJobView(generics.GenericAPIView):
                 else:return Response({'detail':'user already applied for this company'})
             else:return Response({'detail':'user not exists'})
         return Response({'wrong api key'})
+
+class JobApplicationDeleteView(generics.DestroyAPIView):
+    queryset = AppliedJob.objects.all()
+    serializer_class = ApplyJobViewSerializer
+
+    def delete(self,request,*args,**kwargs):
+        if kwargs['key'] == api_key:
+            user = User.objects.filter(id=kwargs['pk'])
+            if user.exists():
+                job_applied_user = AppliedJob.objects.filter(user=user[0])
+                if job_applied_user.exists():
+                    job_applied_user.delete()     
+                    return Response({'detail':'job cancelled successfully'})
+                else:
+                    return Response({'detail':'user had no applied job'})
+            else:return Response({'detail':'user not exists'})
+        return Response({'wrong api key'})
+
+
+
+class ListOfPastCulturalActivityView(generics.ListAPIView):
+    """
+    List Of all past events including cultural activities
+    """
+    queryset = CulturalActivity.objects.all()
+    serializer_class = CulturalActivityListSerializer
+
+    def get(self, request, *args, **kwargs):
+        if kwargs['key'] == api_key: 
+            # trips = Trip.objects.all()
+            # serializer = TripListSerializer(trips,many=True,context={"request": request})
+            # return Response(serializer.data)
+            now = timezone.now()
+            cultural_activity= CulturalActivity.objects.filter(date__lt=now)
+            serialize_cultural_activity = CulturalActivityListSerializer(cultural_activity,many=True,context={"request": request})
+
+
+            return Response(serialize_cultural_activity.data)
+            
+        return Response({'detail':'wrong api key'})
+
+
+
+
+
+class ListOfPastTripView(generics.ListAPIView):
+    """
+    List Of all past events including Trips
+    """
+    queryset = Trip.objects.all()
+    serializer_class = TripListSerializer
+
+    def get(self, request, *args, **kwargs):
+        if kwargs['key'] == api_key: 
+            now = timezone.now()
+            trip_list = Trip.objects.filter(date__lt=now)
+            serialize_trip_list = TripListSerializer(trip_list,many=True,context={"request": request})
+
+            return Response(serialize_trip_list.data)
+            
+        return Response({'detail':'wrong api key'})
+
+
+
+class ListOfPastSportView(generics.ListAPIView):
+    """
+    List Of all past events including sport events
+    """
+    queryset = Sport.objects.all()
+    serializer_class = SportListSerializer
+
+    def get(self, request, *args, **kwargs):
+        if kwargs['key'] == api_key: 
+            now = timezone.now()
+          
+            sports_activity_list = Sport.objects.filter(date__lt=now)
+            serialize_sports_activity = SportListSerializer(sports_activity_list,many=True,context={"request": request})
+
+            return Response(serialize_sports_activity.data)
+            
+        return Response({'detail':'wrong api key'})
+
+
+
+class ListOfPastSocialActivityView(generics.ListAPIView):
+    """
+    List Of all past events including social activity
+    """
+    queryset = SocialActivity.objects.all()
+    serializer_class = SocialActivityListSerializer
+
+    def get(self, request, *args, **kwargs):
+        if kwargs['key'] == api_key: 
+            # trips = Trip.objects.all()
+            # serializer = TripListSerializer(trips,many=True,context={"request": request})
+            # return Response(serializer.data)
+            now = timezone.now()
+          
+            social_activity_list = SocialActivity.objects.filter(date__lt=now)
+            serialize_social_activity = SocialActivityListSerializer(social_activity_list,many=True,context={"request": request})
+
+
+            return Response(serialize_social_activity.data)
+            
+        return Response({'detail':'wrong api key'})
+            
+
+           
+
+class PastAnnouncementListView(generics.GenericAPIView):
+    """
+    This API provides list of past announcements 
+    """
+    queryset = Announcement.objects.all()
+    serializer_class = AnnouncementSerializer
+
+    def get(self, request, *args, **kwargs):
+        if kwargs['key'] == api_key:
+            now = timezone.now()
+            announcements = Announcement.objects.filter(announce_date__lt=now)
+            
+            serializer = AnnouncementSerializer(announcements,many=True,context={"request": request})
+            return Response(serializer.data,status=status.HTTP_200_OK)  
+        return Response(status=status.HTTP_400_BAD_REQUEST)
