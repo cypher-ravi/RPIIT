@@ -12,6 +12,7 @@ urlpatterns = [
     
     
     path('student_profile/<str:pk>', StudentProfileView.as_view()),
+    path('student_sport_profile/<str:pk>', StudentSportProfileView.as_view()),
     path('update_student_profile/<str:pk>', UpdateStudentProfileView.as_view()),
 
     path('student_detail/<str:pk>', StudentDetailsView.as_view()),
@@ -37,5 +38,12 @@ urlpatterns = [
     path('student_info/<str:phone>', StudentInfoView.as_view()),
 
     path('apply_job/<str:pk>/<str:company_id>', ApplyJobView.as_view()),#apply job
-    path('cancel_applied_job/<str:pk>/<str:company_id>', JobApplicationDeleteView.as_view()),#apply job
+    path('cancel_applied_job/<str:pk>/<str:company_id>', JobApplicationDeleteView.as_view()),#delete apply job
+    path('participate_cultural_activity/<str:pk>/<str:cultural_activity_id>', participate_cultural_activity),#apply cultural activity
+    path('participate_sport_event/<str:pk>/<str:sport_event_id>', participate_sport_event),#apply sport
+    path('participate_social_activity/<str:pk>/<str:social_activity_id>', participate_social_activity),#apply social activity
+
+    path('add_social_activity/<str:pk>/', AddSocialActivityRequestHandler.as_view()),#apply sport
+
+    
 ]

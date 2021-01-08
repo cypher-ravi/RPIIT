@@ -4,8 +4,8 @@ from .models import *
 
 @admin.register(Announcement)
 class AnnouncementAdmin(admin.ModelAdmin):
-    list_display = ('title','description','img','announce_date')
-    list_filter = ('announce_date' , )
+    list_display = ('title','description','img',)
+    list_filter = ('date' , )
     search_fields = ('title','description','department__name',)
   
 
@@ -31,6 +31,14 @@ class ResumeAdmin(admin.ModelAdmin):
 
 
 admin.site.register(PlacementCompany)
+
+
+
+@admin.register(StudentSportProfile)
+class StudentSportProfileAdmin(admin.ModelAdmin):
+    list_display = ('roll_no','age','user',)
+    search_fields = ('roll_no','user__phone',)
+
 
 
 

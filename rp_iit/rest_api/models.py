@@ -19,7 +19,8 @@ class Department(models.Model):
 
 class Announcement(models.Model):
     department = models.ForeignKey(Department,on_delete=models.CASCADE,blank=True, null=True)
-    announce_date = models.DateTimeField()
+    date = models.DateField(blank=True, null=True)
+    time  = models.TimeField(auto_now=False, auto_now_add=False,blank=True, null=True)
     title = models.CharField(max_length=100,default='')
     description = models.TextField(default='')
     img = models.ImageField(upload_to='Announcements/img')
@@ -86,12 +87,13 @@ class Sport(models.Model):
 
 class CulturalActivity(models.Model):
     student = models.ManyToManyField(Student,blank=True)
-    name = models.CharField(max_length=50,default='',blank=True, null=True)
-    date = models.DateField(blank=True, null=True)
+    name = models.CharField(max_length=50,default='')
+    date = models.DateField()
     time  = models.TimeField(auto_now=False, auto_now_add=False)
     venue = models.CharField(max_length=225,default='',blank=True, null=True)
     img = models.ImageField(upload_to='Cultural_activity/img',blank=True, null=True)
     description = models.TextField(blank=True, null=True)
+   
 
     class Meta:
         verbose_name_plural = "Cultural Activities list"
@@ -100,11 +102,14 @@ class CulturalActivity(models.Model):
 
 class SocialActivity(models.Model):
     student = models.ManyToManyField(Student,blank=True)
-    name = models.CharField(max_length=50,default='',blank=True, null=True)
-    date = models.DateField(blank=True, null=True)
+    name = models.CharField(max_length=50,default='')
+    date = models.DateField()
     time  = models.TimeField(auto_now=False, auto_now_add=False)
-    img = models.ImageField(upload_to='Social_activity/img',blank=True, null=True)
+    description = models.TextField()
+    img = models.ImageField(upload_to='Social_activity/img')
     co_ordinator = models.CharField(max_length=120,default='',blank=True, null=True)
+    approved = models.BooleanField(default=False)
+
 
     class Meta:
         verbose_name_plural = "Social Activities list"
@@ -173,3 +178,19 @@ class AppliedJob(models.Model):
     company = models.ForeignKey(PlacementCompany,on_delete=models.CASCADE,blank=True, null=True)
 
     def __str__(self): return "user id " + str(self.user.id)+ ' applied for '+ str(self.company.name)
+
+
+
+class StudentSportProfile(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE,blank=True, null=True)
+    roll_no = models.CharField(max_length=25,primary_key=True,unique=True)
+    age = models.CharField(max_length=25,default='')
+    weight = models.CharField(max_length=25,default='')
+    height = models.CharField(max_length=25,default='')
+    interest = models.CharField(max_length=255,default='')
+
+    class Meta:
+        verbose_name_plural = "Students Sport Profile Details"
+
+    def __str__(self):
+        return self.roll_no

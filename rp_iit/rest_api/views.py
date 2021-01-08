@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from .models import Announcement, Department, PlacementCompany, Resume, Student
 from .serializers import *
 from django.utils import timezone
+from rest_framework.decorators import api_view
 
 api_key = config('api_key')
 
@@ -22,7 +23,7 @@ class AnnouncementListView(generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         if kwargs['key'] == api_key:
-            announcements = Announcement.objects.all().order_by('-announce_date')
+            announcements = Announcement.objects.all().order_by('-date')
             if not announcements:
                 return Response({'detail':'no announcements'})
             else:
@@ -233,8 +234,8 @@ class SocialActivityList(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         if kwargs['key'] == api_key: 
-            social_activities_in = SocialActivity.objects.all().order_by('-date')
-            serializer = SportListSerializer(social_activities_in,many=True,context={"request": request})
+            social_activities_in = SocialActivity.objects.filter(approved=True).order_by('-date')
+            serializer = SocialActivityListSerializer(social_activities_in,many=True,context={"request": request})
             return Response(serializer.data)
         return Response({'detail':'wrong api key'})
 
@@ -283,21 +284,14 @@ class StudentInfoView(generics.RetrieveAPIView):
                 return Response({'user no exists'})
             else:
                 
-                profile = Student.objects.filter(user=user[0])
                 resume = Resume.objects.filter(user=user[0])
-
-                if not  profile:
-                    is_student = False
-                else:
-                    is_student = True
-
 
                 if not resume:
                     resume_submission = False
                 else:
                     resume_submission = True
 
-                return Response({'user_id':user[0].id,'student':is_student,'resume':resume_submission})
+                return Response({'user_id':user[0].id,'student':user[0].is_student,'resume':resume_submission})
 
 
 class ApplyJobView(generics.GenericAPIView,mixins.DestroyModelMixin):
@@ -445,8 +439,119 @@ class PastAnnouncementListView(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         if kwargs['key'] == api_key:
             now = timezone.now()
-            announcements = Announcement.objects.filter(announce_date__lt=now)
+            announcements = Announcement.objects.filter(date__lt=now)
             
             serializer = AnnouncementSerializer(announcements,many=True,context={"request": request})
             return Response(serializer.data,status=status.HTTP_200_OK)  
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
+@api_view(['GET','POST'])
+def participate_cultural_activity(request, *args, **kwargs):
+        if kwargs['key'] == api_key:
+            if request.method == 'POST':
+                user = User.objects.get(id=kwargs['pk'])
+                if user != None:
+                    student = Student.objects.filter(user=user)
+                    if student:
+                        cultural_activity = CulturalActivity.objects.get(id =kwargs['cultural_activity_id'])
+                        if cultural_activity:
+                            cultural_activity.student.add(student[0])
+                            cultural_activity.save()
+                            return Response({"detail":"applied for culturalactivity"})
+                        else:
+                            return Response({"detail":"cultural activity not found"})
+                    return Response({"detail":"student not found"})
+                return Response({"detail":"user not found"})
+            else:
+                return Response({"detail":"method not allowed"})
+        else:
+            return Response({"detail":"wrong api key"})
+
+
+
+@api_view(['GET','POST'])
+def participate_sport_event(request, *args, **kwargs):
+        if kwargs['key'] == api_key:
+            if request.method == "POST":
+                user = User.objects.get(id=kwargs['pk'])
+                if user != None:
+                    student = Student.objects.filter(user=user)
+                    if student:
+                        sport_event = Sport.objects.get(id =kwargs['sport_event_id'])
+                        if sport_event:
+                            sport_event.student.add(student[0])
+                            sport_event.save()
+                            return Response({"detail":"applied for sport"})
+                        else:
+                            return Response({"detail":"sport not found"})
+                    return Response({"detail":"student not found"})
+                return Response({"detail":"user not found"})
+            else:
+                return Response({"detail":"method not allowed"})
+        else:
+            return Response({"detail":"wrong api key"})
+
+
+@api_view(['GET','POST'])
+def participate_social_activity(request, *args, **kwargs):
+        if kwargs['key'] == api_key:
+            if request.method == "POST":
+                user = User.objects.get(id=kwargs['pk'])
+                if user != None:
+                    student = Student.objects.filter(user=user)
+                    if student:
+                        social_activities = SocialActivity.objects.get(id =kwargs['social_activity_id'])
+                        if social_activities:
+                            social_activities.student.add(student[0])
+                            social_activities.save()
+                            return Response({"detail":"applied for social activity"})
+                        else:
+                            return Response({"detail":"social activity not found"})
+                    return Response({"detail":"student not found"})
+                return Response({"detail":"user not found"})
+            else:
+                return Response({"detail":"method not allowed"})
+        else:
+            return Response({"detail":"wrong api key"})
+
+
+
+class AddSocialActivityRequestHandler(generics.GenericAPIView):
+    queryset = SocialActivity.objects.all()
+    serializer_class = SocialActivityRequestSerializer
+
+
+    def post(self, request, *args, **kwargs):
+        if kwargs['key'] == api_key:
+            user = User.objects.get(id=kwargs['pk'])
+            if user != None:
+                serializer = SocialActivityRequestSerializer(data=request.data)
+                if serializer.is_valid(raise_exception=True):
+                    serializer.save()
+                    return Response({"detail":"added to social activity"})
+                else:return Response(serializer.errors)
+            else:return Response({"detail":"user not found"})
+        else:return Response({"detail":"wrong api key"})
+                
+
+
+class StudentSportProfileView(generics.GenericAPIView):
+    queryset = StudentSportProfile.objects.all()
+    serializer_class = StudentSportProfileSerializer
+
+
+    def post(self, request, *args, **kwargs):
+        if kwargs['key'] == api_key:
+            user = User.objects.get(id=kwargs['pk'])
+            if user != None:
+                serializer = StudentSportProfileSerializer(data=request.data)
+                if serializer.is_valid(raise_exception=True):
+                    serializer.save(user=user)
+                    return Response({"detail":"sport profile create successfully"})
+                return Response({"detail":"wrong data"})
+            return Response({"detail":"user not found"})
+        else:return Response({"detail":"wrong api key"})

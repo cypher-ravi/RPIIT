@@ -6,7 +6,6 @@ from rest_framework import status
 
 
 class AnnouncementSerializer(ModelSerializer):
-    announce_date = DateTimeField(format='%H:%M:%S  %d-%m-%Y',read_only=True)
     img = SerializerMethodField(method_name='get_photo_url')
     class Meta:
         model = Announcement
@@ -182,9 +181,34 @@ class StudentInfoSerializer(ModelSerializer):
     class Meta:
         model = Student
         fields = '__all__'
+
+class StudentSportProfileSerializer(ModelSerializer):
+    class Meta:
+        model = StudentSportProfile
+        exclude = ['user']
         
 
 class ApplyJobViewSerializer(ModelSerializer):
     class Meta:
         model = AppliedJob
         fields = ['company_id','user_id']
+
+
+
+class CulturalActivityParticipantSerializer(ModelSerializer):
+    """
+    Serializer for student participation
+    """
+    class Meta:
+        model = CulturalActivity
+        fields = ['student_id']
+
+
+
+class SocialActivityRequestSerializer(ModelSerializer):
+    img = Base64ImageField()
+    class Meta:
+        model = SocialActivity
+        exclude = ['approved','student']
+    
+   
