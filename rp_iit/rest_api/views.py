@@ -42,16 +42,16 @@ class ResumeUploadView(generics.GenericAPIView):
     @csrf_exempt
     def post(self, request, *args, **kwargs):
         if kwargs['key'] == api_key:
-            user = User.objects.get(id=kwargs['pk'])
-            if user !=None:
+            user = User.objects.filter(id=kwargs['pk'])
+            if user.exists():
                 try:
-                    resume = Resume.objects.get(user=user)
+                    resume = Resume.objects.get(user=user[0])
                 except:
                     resume = Resume.objects.none()
                 if not resume:
                     serializer = ResumeUploadSerializer(data=request.data)
                     if serializer.is_valid(raise_exception=True):
-                        serializer.save(user=user)
+                        serializer.save(user=user[0])
                         return Response({'detail':'Resume created'},status=status.HTTP_201_CREATED)
                     return Response({'detail':serializer.errors},status=status.HTTP_400_BAD_REQUEST)    
                 else:
@@ -72,22 +72,24 @@ class StudentProfileView(generics.GenericAPIView):
     @csrf_exempt
     def post(self, request, *args, **kwargs):
         if kwargs['key'] == api_key:
-            user = User.objects.get(id=kwargs['pk'])
-            if user !=None:
+            user = User.objects.filter(id=kwargs['pk'])
+            if user.exists():
                 try:
-                    profile = Student.objects.get(user=user)
+                    profile = Student.objects.get(user=user[0])
                 except:
                     profile = Student.objects.none()
                 if not profile:
                     serializer = StudentProfileSerializer(data=request.data)
                     if serializer.is_valid(raise_exception=True):
-                        serializer.save(user=user)
+                        serializer.save(user=user[0])
                         return Response({'detail':'Student Profile created'},status=status.HTTP_201_CREATED)
                     return Response({'detail':serializer.errors},status=status.HTTP_400_BAD_REQUEST)    
                 else:
                     return Response({'profile already exists'})
-            return Response({'details':'user not exists'})
-        return Response({'detail':'wrong api key'})
+            else:
+                return Response({'details':'user not exists'})
+        else:
+            return Response({'detail':'wrong api key'})
 
 
 
@@ -116,12 +118,14 @@ class SportsDetailOfStudentView(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         if kwargs['key'] == api_key:
-            student = Student.objects.get(user__id = kwargs['pk'])
-            sports_participanted_in = Sport.objects.filter(student = student)
-            if sports_participanted_in.exists():
-                serializer = StudentSportDetailSerializer(sports_participanted_in,many=True,context={"request": request})
-                return Response(serializer.data)
-            else:return Response({'No sports participation'})
+            student = Student.objects.filter(user__id = kwargs['pk'])
+            if student.exists():
+                sports_participanted_in = Sport.objects.filter(student = student[0])
+                if sports_participanted_in.exists():
+                    serializer = StudentSportDetailSerializer(sports_participanted_in,many=True,context={"request": request})
+                    return Response(serializer.data)
+                else:return Response({'No sports participation'})
+            else:return Response({'detail':'not a student'})
         return Response({'detail':'wrong api key'})
 
 
@@ -135,12 +139,14 @@ class CulturalActivityDetailOfStudentView(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         if kwargs['key'] == api_key: 
-            student = Student.objects.get(user__id = kwargs['pk'])
-            cultural_activities_in = CulturalActivity.objects.filter(student = student)
-            if cultural_activities_in.exists():
-                serializer = StudentCulturalActivityDetailSerializer(cultural_activities_in,many=True,context={"request": request})
-                return Response(serializer.data)
-            else:return Response({'detail':'No cultural participation'})
+            student = Student.objects.filter(user__id = kwargs['pk'])
+            if student.exists():
+                cultural_activities_in = CulturalActivity.objects.filter(student = student[0])
+                if cultural_activities_in.exists():
+                    serializer = StudentCulturalActivityDetailSerializer(cultural_activities_in,many=True,context={"request": request})
+                    return Response(serializer.data)
+                else:return Response({'detail':'No cultural participation'})
+            else:return Response({'detail':'not a student'})
         else:
             return Response({'detail':'wrong api key'})
 
@@ -160,7 +166,7 @@ class SocialActivityDetailOfStudentView(generics.ListAPIView):
                     serializer = StudentSocialActivityDetailSerializer(social_activities_in,many=True,context={"request": request})
                     return Response(serializer.data)
                 else:return Response({'No social activity participation'})
-            else:return Response({'detail':'no student'})
+            else:return Response({'detail':'not a student'})
         else:
             return Response({'detail':'wrong api key'})
 
@@ -280,19 +286,21 @@ class StudentInfoView(generics.RetrieveAPIView):
 
         if kwargs['key'] == api_key: 
             user = User.objects.filter(phone=kwargs['phone'])
-            if not user.exists():
-                return Response({'user no exists'})
-            else:
-                
+            if user.exists():    
                 resume = Resume.objects.filter(user=user[0])
-
+                student = Student.objects.filter(user=user[0])
                 if not resume:
                     resume_submission = False
                 else:
                     resume_submission = True
+                if not student:
+                    student_profile = False
+                else:
+                    student_profile = True
 
-                return Response({'user_id':user[0].id,'student':user[0].is_student,'resume':resume_submission})
-
+                return Response({'user_id':user[0].id,'student_by_admin':user[0].is_student,'student_profile':student_profile,'resume':resume_submission})
+            else:
+                return Response({"detail":'user not exists'})
 
 class ApplyJobView(generics.GenericAPIView,mixins.DestroyModelMixin):
     queryset = AppliedJob.objects.all()
@@ -453,14 +461,14 @@ class PastAnnouncementListView(generics.GenericAPIView):
 def participate_cultural_activity(request, *args, **kwargs):
         if kwargs['key'] == api_key:
             if request.method == 'POST':
-                user = User.objects.get(id=kwargs['pk'])
-                if user != None:
-                    student = Student.objects.filter(user=user)
-                    if student:
-                        cultural_activity = CulturalActivity.objects.get(id =kwargs['cultural_activity_id'])
-                        if cultural_activity:
-                            cultural_activity.student.add(student[0])
-                            cultural_activity.save()
+                user = User.objects.filter(id=kwargs['pk'])
+                if user.exists():
+                    student = Student.objects.filter(user=user[0])
+                    if student.exists():
+                        cultural_activity = CulturalActivity.objects.filter(id =kwargs['cultural_activity_id'])
+                        if cultural_activity.exists():
+                            cultural_activity[0].student.add(student[0])
+                            cultural_activity[0].save()
                             return Response({"detail":"applied for culturalactivity"})
                         else:
                             return Response({"detail":"cultural activity not found"})
@@ -477,14 +485,14 @@ def participate_cultural_activity(request, *args, **kwargs):
 def participate_sport_event(request, *args, **kwargs):
         if kwargs['key'] == api_key:
             if request.method == "POST":
-                user = User.objects.get(id=kwargs['pk'])
-                if user != None:
-                    student = Student.objects.filter(user=user)
-                    if student:
-                        sport_event = Sport.objects.get(id =kwargs['sport_event_id'])
-                        if sport_event:
-                            sport_event.student.add(student[0])
-                            sport_event.save()
+                user = User.objects.filter(id=kwargs['pk'])
+                if user.exists():
+                    student = Student.objects.filter(user=user[0])
+                    if student.exists():
+                        sport_event = Sport.objects.filter(id =kwargs['sport_event_id'])
+                        if sport_event.exists():
+                            sport_event[0].student.add(student[0])
+                            sport_event[0].save()
                             return Response({"detail":"applied for sport"})
                         else:
                             return Response({"detail":"sport not found"})
@@ -500,14 +508,14 @@ def participate_sport_event(request, *args, **kwargs):
 def participate_social_activity(request, *args, **kwargs):
         if kwargs['key'] == api_key:
             if request.method == "POST":
-                user = User.objects.get(id=kwargs['pk'])
-                if user != None:
-                    student = Student.objects.filter(user=user)
-                    if student:
-                        social_activities = SocialActivity.objects.get(id =kwargs['social_activity_id'])
-                        if social_activities:
-                            social_activities.student.add(student[0])
-                            social_activities.save()
+                user = User.objects.filter(id=kwargs['pk'])
+                if user.exists():
+                    student = Student.objects.filter(user=user[0])
+                    if student.exists():
+                        social_activities = SocialActivity.objects.filter(id =kwargs['social_activity_id'])
+                        if social_activities.exists():
+                            social_activities[0].student.add(student[0])
+                            social_activities[0].save()
                             return Response({"detail":"applied for social activity"})
                         else:
                             return Response({"detail":"social activity not found"})
@@ -527,8 +535,8 @@ class AddSocialActivityRequestHandler(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         if kwargs['key'] == api_key:
-            user = User.objects.get(id=kwargs['pk'])
-            if user != None:
+            user = User.objects.filter(id=kwargs['pk'])
+            if user.exists():
                 serializer = SocialActivityRequestSerializer(data=request.data)
                 if serializer.is_valid(raise_exception=True):
                     serializer.save()
@@ -546,11 +554,11 @@ class StudentSportProfileView(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         if kwargs['key'] == api_key:
-            user = User.objects.get(id=kwargs['pk'])
-            if user != None:
+            user = User.objects.filter(id=kwargs['pk'])
+            if user.exists():
                 serializer = StudentSportProfileSerializer(data=request.data)
                 if serializer.is_valid(raise_exception=True):
-                    serializer.save(user=user)
+                    serializer.save(user=user[0])
                     return Response({"detail":"sport profile create successfully"})
                 return Response({"detail":"wrong data"})
             return Response({"detail":"user not found"})
