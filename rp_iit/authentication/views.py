@@ -33,7 +33,11 @@ class UserRegisterView(generics.GenericAPIView):
                 serializer = UserSerializer(data=request.data)
                 if serializer.is_valid(raise_exception=True):
                     serializer.save(is_verified=True)
-                    return Response((serializer.data['id']),status= status.HTTP_201_CREATED)
+                    user = User.objects.filter(id=serializer.data['id'])
+                    if user.exists():
+                        login(request,user[0])
+                        return Response((user[0].id),status= status.HTTP_201_CREATED)
+                    else:return Response({"detail":"user not exists"})
                 return Response({'detail':serializer.errors})
             else:
                 if db_user[0].is_verified:
