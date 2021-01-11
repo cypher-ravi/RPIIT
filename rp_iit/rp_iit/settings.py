@@ -94,8 +94,12 @@ WSGI_APPLICATION = 'rp_iit.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'd4r771ligac2ig',
+        'USER': 'wgenfzjrjigzum',
+        'PASSWORD':'74cfacf45b4ffa10cfb9284057731481003184ab1cf3bff32ec391a4110785d7',
+        'HOST': 'ec2-3-232-240-231.compute-1.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
