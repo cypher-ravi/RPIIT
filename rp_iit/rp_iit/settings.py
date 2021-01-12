@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 import os
 # for heroku
-# import django_heroku
+import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -92,24 +92,24 @@ WSGI_APPLICATION = 'rp_iit.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-# DATABASES = {
-#    'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'd4r771ligac2ig',
-#         'USER': 'wgenfzjrjigzum',
-#         'PASSWORD':'74cfacf45b4ffa10cfb9284057731481003184ab1cf3bff32ec391a4110785d7',
-#         'HOST': 'ec2-3-232-240-231.compute-1.amazonaws.com',
-#         'PORT': '5432',
-#     }
-# }
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'db.sqlite3',
-    },
-    'OPTIONS': {'use_pure': True }
+   'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'd4r771ligac2ig',
+        'USER': 'wgenfzjrjigzum',
+        'PASSWORD':'74cfacf45b4ffa10cfb9284057731481003184ab1cf3bff32ec391a4110785d7',
+        'HOST': 'ec2-3-232-240-231.compute-1.amazonaws.com',
+        'PORT': '5432',
+    }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': 'db.sqlite3',
+#     },
+#     'OPTIONS': {'use_pure': True }
+# }
 
 
 # Password validation
@@ -186,6 +186,6 @@ SWAGGER_SETTINGS = {
     'SHOW_REQUEST_HEADERS': True
 }
 
-# django_heroku.settings(locals())
+django_heroku.settings(locals())
     
 FCM_SERVER_KEY="[AAAAcJkoZ-I:APA91bE2NWUD-Q5O5MB8gQaLnN9cQ72hw3T_micRtdO1qPb6qSzGDJhx3iyVJyKqOTsuQujwVt04zG2MPunMmkARVTERoPVGgSI47RSCnBBSwkAZRIzim1xrbvO00Dl3oHeLjnIqTQ_q]"
