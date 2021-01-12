@@ -21,7 +21,7 @@ urlpatterns = [
     path('student_social_activity_detail/<str:pk>', SocialActivityDetailOfStudentView.as_view()),
     path('student_applied_job_detail/<str:pk>', AppliedJobDetailOfStudentView.as_view()),
 
-    path('list_of_companies/', ListOfCompaniesView.as_view()),
+    path('list_of_companies/<str:user_id>/', ListOfCompaniesView.as_view()),
     path('list_of_cultural_activties/<str:user_id>/', CulturalActivityList.as_view()),
     path('list_of_social_activties/<str:user_id>/', SocialActivityList.as_view()),
     path('list_of_sport_events/<str:user_id>/', SportEventsList.as_view()),

@@ -122,10 +122,19 @@ class ListOfCompaniesView(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         if kwargs['key'] == api_key: 
-            companies = PlacementCompany.objects.all()
-            serializer = PlacementCompanySerializer(companies,many=True,context={"request": request})
-            return Response(serializer.data)
+            user = User.objects.filter(id=kwargs['user_id']).first()
+            if user != None:
+                student = Student.objects.filter(user=user).first()
+                if student != None:
+                    companies = PlacementCompany.objects.all().exclude(student=student)
+                    serializer = PlacementCompanySerializer(companies,many=True,context={"request": request})
+                    return Response(serializer.data)
+                else:
+                    return Response({"detail":"student profile not found"})
+            else:
+                return Response({"detail":"user not found"})
         return Response({'detail':'wrong api key'})
+
 
 
 
