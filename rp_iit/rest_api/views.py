@@ -122,10 +122,19 @@ class ListOfCompaniesView(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         if kwargs['key'] == api_key: 
-            companies = PlacementCompany.objects.all()
-            serializer = PlacementCompanySerializer(companies,many=True,context={"request": request})
-            return Response(serializer.data)
+            user = User.objects.filter(id=kwargs['user_id']).first()
+            if user != None:
+                student = Student.objects.filter(user=user).first()
+                if student != None:
+                    companies = PlacementCompany.objects.all().exclude(student=student)
+                    serializer = PlacementCompanySerializer(companies,many=True,context={"request": request})
+                    return Response(serializer.data)
+                else:
+                    return Response({"detail":"student profile not found"})
+            else:
+                return Response({"detail":"user not found"})
         return Response({'detail':'wrong api key'})
+
 
 
 
@@ -517,6 +526,30 @@ def participate_cultural_activity(request, *args, **kwargs):
             return Response({"detail":"wrong api key"})
 
 
+@api_view(['GET','POST'])
+def cancel_cultural_activity(request, *args, **kwargs):
+        if kwargs['key'] == api_key:
+            if request.method == "POST":
+                user = User.objects.filter(id=kwargs['pk']).first()
+                if user != None:
+                    student = Student.objects.filter(user=user).first()
+                    if student != None:
+                        cultural_activity = CulturalActivity.objects.filter(id =kwargs['cultural_activity_id']).first()
+                        if cultural_activity != None:
+                            cultural_activity.student.remove(student)
+                            cultural_activity.save()
+                            return Response({"detail":"cancelled cultural activity"})
+                        else:
+                            return Response({"detail":"cultural activity not found"})
+                    return Response({"detail":"student not found"})
+                return Response({"detail":"user not found"})
+            else:
+                return Response({"detail":"method not allowed"})
+        else:
+            return Response({"detail":"wrong api key"})
+
+
+
 
 @api_view(['GET','POST'])
 def participate_sport_event(request, *args, **kwargs):
@@ -542,6 +575,33 @@ def participate_sport_event(request, *args, **kwargs):
 
 
 @api_view(['GET','POST'])
+def cancel_sport_event(request, *args, **kwargs):
+        if kwargs['key'] == api_key:
+            if request.method == "POST":
+                user = User.objects.filter(id=kwargs['pk']).first()
+                if user != None:
+                    student = Student.objects.filter(user=user).first()
+                    if student != None:
+                        sport_event = Sport.objects.filter(id =kwargs['sport_event_id']).first()
+                        if sport_event != None:
+                            sport_event.student.remove(student)
+                            sport_event.save()
+                            return Response({"detail":"cancelled sport event"})
+                        else:
+                            return Response({"detail":"sport event not found"})
+                    return Response({"detail":"student not found"})
+                return Response({"detail":"user not found"})
+            else:
+                return Response({"detail":"method not allowed"})
+        else:
+            return Response({"detail":"wrong api key"})
+
+
+
+
+
+
+@api_view(['GET','POST'])
 def participate_social_activity(request, *args, **kwargs):
         if kwargs['key'] == api_key:
             if request.method == "POST":
@@ -554,6 +614,30 @@ def participate_social_activity(request, *args, **kwargs):
                             social_activities[0].student.add(student[0])
                             social_activities[0].save()
                             return Response({"detail":"applied for social activity"})
+                        else:
+                            return Response({"detail":"social activity not found"})
+                    return Response({"detail":"student not found"})
+                return Response({"detail":"user not found"})
+            else:
+                return Response({"detail":"method not allowed"})
+        else:
+            return Response({"detail":"wrong api key"})
+
+
+
+@api_view(['GET','POST'])
+def cancel_social_activity(request, *args, **kwargs):
+        if kwargs['key'] == api_key:
+            if request.method == "POST":
+                user = User.objects.filter(id=kwargs['pk']).first()
+                if user != None:
+                    student = Student.objects.filter(user=user)
+                    if student != None:
+                        social_activities = SocialActivity.objects.filter(id =kwargs['social_activity_id']).first()
+                        if social_activities != None:
+                            social_activities.student.remove(student[0])
+                            social_activities.save()
+                            return Response({"detail":"cancelled social activity"})
                         else:
                             return Response({"detail":"social activity not found"})
                     return Response({"detail":"student not found"})
