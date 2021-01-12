@@ -59,4 +59,3 @@ class TripAdmin(admin.ModelAdmin):
 class SocialActivityAdmin(admin.ModelAdmin):
     list_display = ('name',) 
 
-admin.site.register(AppliedJob)

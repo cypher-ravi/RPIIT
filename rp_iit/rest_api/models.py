@@ -161,7 +161,7 @@ class Resume(models.Model):
 
 
 class PlacementCompany(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE,blank=True, null=True)
+    student = models.ManyToManyField(Student,blank=True)
     name = models.CharField(max_length =50)
     description = models.TextField()
     address = models.CharField(max_length = 225,default='')
@@ -172,12 +172,6 @@ class PlacementCompany(models.Model):
 
     def __str__(self): return self.name
 
-
-class AppliedJob(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE,blank=True, null=True)
-    company = models.ForeignKey(PlacementCompany,on_delete=models.CASCADE,blank=True, null=True)
-
-    def __str__(self): return "user id " + str(self.user.id)+ ' applied for '+ str(self.company.name)
 
 
 

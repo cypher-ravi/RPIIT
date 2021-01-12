@@ -46,7 +46,7 @@ class PlacementCompanySerializer(ModelSerializer):
     img = SerializerMethodField(method_name='get_photo_url')
     class Meta:
         model = PlacementCompany
-        exclude = ['user']
+        exclude = ['student']
 
 
     def get_photo_url(self, obj):
@@ -188,10 +188,6 @@ class StudentSportProfileSerializer(ModelSerializer):
         exclude = ['user']
         
 
-class ApplyJobViewSerializer(ModelSerializer):
-    class Meta:
-        model = AppliedJob
-        fields = ['company_id','user_id']
 
 
 
@@ -211,4 +207,5 @@ class SocialActivityRequestSerializer(ModelSerializer):
         model = SocialActivity
         exclude = ['approved','student']
     
-   
+
+

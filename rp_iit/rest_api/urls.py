@@ -19,6 +19,7 @@ urlpatterns = [
     path('student_sports_detail/<str:pk>', SportsDetailOfStudentView.as_view()),
     path('student_cultural_activity_detail/<str:pk>', CulturalActivityDetailOfStudentView.as_view()),
     path('student_social_activity_detail/<str:pk>', SocialActivityDetailOfStudentView.as_view()),
+    path('student_applied_job_detail/<str:pk>', AppliedJobDetailOfStudentView.as_view()),
 
     path('list_of_companies/', ListOfCompaniesView.as_view()),
     path('list_of_cultural_activties/', CulturalActivityList.as_view()),
@@ -37,8 +38,9 @@ urlpatterns = [
 
     path('student_info/<str:phone>', StudentInfoView.as_view()),
 
-    path('apply_job/<str:pk>/<str:company_id>', ApplyJobView.as_view()),#apply job
-    path('cancel_applied_job/<str:pk>/<str:company_id>', JobApplicationDeleteView.as_view()),#delete apply job
+  
+    path('apply_job/<str:pk>/<str:company_id>', apply_for_job),#apply job
+    path('cancel_applied_job/<str:pk>/<str:company_id>', cancel_applied_job),#cancel apply job
     path('participate_cultural_activity/<str:pk>/<str:cultural_activity_id>', participate_cultural_activity),#apply cultural activity
     path('participate_sport_event/<str:pk>/<str:sport_event_id>', participate_sport_event),#apply sport
     path('participate_social_activity/<str:pk>/<str:social_activity_id>', participate_social_activity),#apply social activity
