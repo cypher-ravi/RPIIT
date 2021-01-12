@@ -47,10 +47,18 @@ class CulturalActivityList(generics.ListAPIView):
     serializer_class = CulturalActivityListSerializer
 
     def get(self, request, *args, **kwargs):
-        if kwargs['key'] == api_key: 
-            cultural_activities_in = CulturalActivity.objects.all().order_by('-date')
-            serializer = CulturalActivityListSerializer(cultural_activities_in,many=True,context={"request": request})
-            return Response(serializer.data)
+        if kwargs['key'] == api_key:
+            user = User.objects.filter(id=kwargs['user_id']).first()
+            if user != None:
+                student = Student.objects.filter(user=user).first()
+                if student != None:  
+                    cultural_activities_in = CulturalActivity.objects.all().order_by('-date').exclude(student = student)
+                    serializer = CulturalActivityListSerializer(cultural_activities_in,many=True,context={"request": request})
+                    return Response(serializer.data)
+                else:
+                        return Response({"detail":"student profile not found"})
+            else:
+                return Response({"dedetail":"user not found"})
         else:
             return Response({'detail':'wrong api key'})
 
@@ -65,10 +73,18 @@ class SportEventsList(generics.ListAPIView):
     serializer_class = SportListSerializer
 
     def get(self, request, *args, **kwargs):
-        if kwargs['key'] == api_key: 
-            sports_participanted_in = Sport.objects.all().order_by('-date')
-            serializer = SportListSerializer(sports_participanted_in,many=True,context={"request": request})
-            return Response(serializer.data)
+        if kwargs['key'] == api_key:
+            user = User.objects.filter(id=kwargs['user_id']).first()
+            if user != None:
+                student = Student.objects.filter(user=user).first()
+                if student != None: 
+                    sports_participanted_in = Sport.objects.all().order_by('-date').exclude(student = student)
+                    serializer = SportListSerializer(sports_participanted_in,many=True,context={"request": request})
+                    return Response(serializer.data)
+                else:
+                    return Response({"detail":"student profile not found"})
+            else:
+                return Response({"dedetail":"user not found"})
         return Response({'detail':'wrong api key'})
 
 
@@ -82,9 +98,17 @@ class SocialActivityList(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         if kwargs['key'] == api_key: 
-            social_activities_in = SocialActivity.objects.filter(approved=True).order_by('-date')
-            serializer = SocialActivityListSerializer(social_activities_in,many=True,context={"request": request})
-            return Response(serializer.data)
+            user = User.objects.filter(id=kwargs['user_id']).first()
+            if user != None:
+                student = Student.objects.filter(user=user).first()
+                if student != None:
+                    social_activities_in = SocialActivity.objects.filter(approved=True).order_by('-date').exclude(student=student)
+                    serializer = SocialActivityListSerializer(social_activities_in,many=True,context={"request": request})
+                    return Response(serializer.data)
+                else:
+                    return Response({"detail":"student profile not found"})
+            else:
+                return Response({"dedetail":"user not found"})
         return Response({'detail':'wrong api key'})
 
 

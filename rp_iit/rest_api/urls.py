@@ -22,9 +22,9 @@ urlpatterns = [
     path('student_applied_job_detail/<str:pk>', AppliedJobDetailOfStudentView.as_view()),
 
     path('list_of_companies/', ListOfCompaniesView.as_view()),
-    path('list_of_cultural_activties/', CulturalActivityList.as_view()),
-    path('list_of_social_activties/', SocialActivityList.as_view()),
-    path('list_of_sport_events/', SportEventsList.as_view()),
+    path('list_of_cultural_activties/<str:user_id>/', CulturalActivityList.as_view()),
+    path('list_of_social_activties/<str:user_id>/', SocialActivityList.as_view()),
+    path('list_of_sport_events/<str:user_id>/', SportEventsList.as_view()),
     path('list_of_trips/', ListOfTripView.as_view()),
     
 
