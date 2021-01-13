@@ -745,6 +745,8 @@ class StudentInfoView(generics.RetrieveAPIView):
                 else:
                     student_profile = True
 
+                if student_profile == True:
+                    return Response({'user_id':user[0].id,'name':student.name,'student_by_admin':user[0].is_student,'student_profile':student_profile,'resume':resume_submission})
                 return Response({'user_id':user[0].id,'student_by_admin':user[0].is_student,'student_profile':student_profile,'resume':resume_submission})
             else:
                 return Response({"detail":'user not exists'})
@@ -760,3 +762,15 @@ class StudentInfoView(generics.RetrieveAPIView):
 """
 
 
+class AddDummyData(generics.GenericAPIView):
+    def get(self, request, *args, **kwargs):
+        from .fakedata import Dummy
+        Dummy().addData(kwargs['iterations'])
+        return Response({"detail": 'Data Added successfully'})
+
+
+class DeleteData(generics.GenericAPIView):
+    def get(self, request, *args, **kwargs):
+        from .fakedata import Dummy
+        Dummy().deleteData()
+        return Response({"detail": 'Data Deleted successfully'})
