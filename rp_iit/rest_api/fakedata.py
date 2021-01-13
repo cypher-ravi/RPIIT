@@ -12,7 +12,7 @@ class Dummy():
 		for _ in range(0, iterations):
 
 			obj = User()
-			obj.phone = f.phone_number()
+			obj.phone = random.randint(6666666666,99999999999)
 			obj.session_key = f.md5()
 			obj.is_active = f.boolean()
 			obj.is_staff = f.boolean()
@@ -43,7 +43,7 @@ class Dummy():
 			student_obj.user = obj
 			student_obj.name = f.first_name()
 			student_obj.father_name = f.first_name()
-			student_obj.mobile_number = f.phone_number()
+			student_obj.mobile_number = random.randint(6666666666,99999999999)
 			student_obj.email = f.email()
 			student_obj.address = f.address()
 			student_obj.age = random.randint(16,27)
@@ -99,7 +99,7 @@ class Dummy():
 			resume_obj.user = obj
 			resume_obj.name = f.first_name()
 			resume_obj.father_name = f.first_name()
-			resume_obj.mobile = f.phone_number()
+			resume_obj.mobile = random.randint(6666666666,99999999999)
 			resume_obj.email = f.email()
 			resume_obj.address = f.address()
 			resume_obj.h_qualification = 'test h_qualification'
