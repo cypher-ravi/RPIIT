@@ -93,30 +93,18 @@ WSGI_APPLICATION = 'rp_iit.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-<<<<<<< HEAD
-=======
-DATABASES = {
-   'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ddm391ps95d268',
-        'USER': 'bmepsvklzyxonk',
-        'PASSWORD':'5661d1535b3a06fdc270641c8abd67e47a518030422f6bc7664418ef6bb43950',
-        'HOST': 'ec2-18-235-107-171.compute-1.amazonaws.com',
-        'PORT': '5432',
-    }
-}
-
->>>>>>> 6609abfd61a8cd7c65e76e2244d219f36fe9a33a
 # DATABASES = {
 #    'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'd4r771ligac2ig',
-#         'USER': 'wgenfzjrjigzum',
-#         'PASSWORD':'74cfacf45b4ffa10cfb9284057731481003184ab1cf3bff32ec391a4110785d7',
-#         'HOST': 'ec2-3-232-240-231.compute-1.amazonaws.com',
+#         'NAME': 'ddm391ps95d268',
+#         'USER': 'bmepsvklzyxonk',
+#         'PASSWORD':'5661d1535b3a06fdc270641c8abd67e47a518030422f6bc7664418ef6bb43950',
+#         'HOST': 'ec2-18-235-107-171.compute-1.amazonaws.com',
 #         'PORT': '5432',
 #     }
 # }
+
+
 
 DATABASES = {
     'default': {

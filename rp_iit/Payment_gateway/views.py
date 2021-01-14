@@ -2,7 +2,7 @@ from django.conf import settings
 from django.http import JsonResponse,HttpResponseRedirect,HttpResponse
 from django.shortcuts import redirect, render,reverse
 from django.views.decorators.csrf import csrf_exempt
-
+import requests
 from authentication.models import User
 # Import Payu from Paywix
 from paywix.payu import Payu
@@ -31,7 +31,19 @@ def verify_user_and_amount(request,user_id,amount,trip_id):
             trip = Trip.objects.filter(id = trip_id).first()
             if trip != None:
                 if trip.charges == amount:
-                    payu_checkout(request,student,amount,trip)
+                    info_data = {
+                        'amount':amount,
+                        'email':student.email,
+                        'phone':student.user.phone,
+                        'name':student.name,
+                        'address':student.address,
+                        'trip':trip.name
+                    }
+                    # url = 'http://127.0.0.1:8000/payment/payu/'# use for local server
+                    url = 'http://rpiit.herokuapp.com/payment/payu/'# use for local server
+                    response = requests.post(url,data=info_data)
+                    return HttpResponse(response)
+                    # payu_checkout(request,student,amount,trip)
                     # redirect('Payment_gateway:payu_checkout',args=(student),kwargs=amount)
                 else:
                     return Response({"detail":'trip amount not valid'})
@@ -44,15 +56,16 @@ def verify_user_and_amount(request,user_id,amount,trip_id):
 
 # Payu checkout page
 @csrf_exempt
-def payu_checkout(request,student,amount,trip):
-    if request.method == 'GET':
+def payu_checkout(request,**kwargs):
+    if request.method == 'POST':
         # The dictionary data  should be contains following details
-        data = { 'amount': amount, 
-            'firstname': student.name, 
-            'email': student.email,
-            'phone': student.user.phone, 
+        data = { 'amount': request.POST.get('amount'), 
+            'firstname': request.POST.get('name'), 
+            'email': request.POST.get('email'),
+            'phone': request.POST.get('phone'), 
             'lastname': 'test', 
-            'address2': student.address, 
+            'address2': request.POST.get('address'), 
+            'productinfo': request.POST.get('trip'),
             'state': 'test', 'country': 'test', 
             'zipcode': 'tes', 'udf1': '', 
             'udf2': '', 'udf3': '', 'udf4': '', 'udf5': ''
