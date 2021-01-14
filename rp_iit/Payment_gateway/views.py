@@ -43,8 +43,6 @@ def verify_user_and_amount(request,user_id,amount,trip_id):
                     url = 'http://rpiit.herokuapp.com/payment/payu/'# use for local server
                     response = requests.post(url,data=info_data)
                     return HttpResponse(response)
-                    # payu_checkout(request,student,amount,trip)
-                    # redirect('Payment_gateway:payu_checkout',args=(student),kwargs=amount)
                 else:
                     return Response({"detail":'trip amount not valid'})
             else:
@@ -87,7 +85,7 @@ def payu_checkout(request,**kwargs):
 def payu_success(request):
     data = {k: v[0] for k, v in dict(request.POST).items()}
     response = payu.verify_transaction(data)
-    return JsonResponse(response)
+    return render(request, 'success.html')
 
 
 @csrf_exempt
