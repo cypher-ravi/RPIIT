@@ -54,5 +54,6 @@ urlpatterns = [
     
     path('add_social_activity/<str:pk>/', AddSocialActivityRequestHandler.as_view()),#apply sport
 
-    
+    path('add_dummy_data/<int:iterations>', AddDummyData.as_view()),
+    path('delete_data', DeleteData.as_view()),
 ]
