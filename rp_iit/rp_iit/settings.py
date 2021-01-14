@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 import os
 # for heroku
-import django_heroku
+# import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'authentication',
     'rest_api',
+    'Payment_gateway',
     
 
     #third party libraries
@@ -92,24 +93,26 @@ WSGI_APPLICATION = 'rp_iit.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {
-   'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ddm391ps95d268',
-        'USER': 'bmepsvklzyxonk',
-        'PASSWORD':'5661d1535b3a06fdc270641c8abd67e47a518030422f6bc7664418ef6bb43950',
-        'HOST': 'ec2-18-235-107-171.compute-1.amazonaws.com',
-        'PORT': '5432',
-    }
-}
-
 # DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': 'db.sqlite3',
-#     },
-#     'OPTIONS': {'use_pure': True }
+#    'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'ddm391ps95d268',
+#         'USER': 'bmepsvklzyxonk',
+#         'PASSWORD':'5661d1535b3a06fdc270641c8abd67e47a518030422f6bc7664418ef6bb43950',
+#         'HOST': 'ec2-18-235-107-171.compute-1.amazonaws.com',
+#         'PORT': '5432',
+#     }
 # }
+
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'db.sqlite3',
+    },
+    'OPTIONS': {'use_pure': True }
+}
 
 
 # Password validation
@@ -186,6 +189,16 @@ SWAGGER_SETTINGS = {
     'SHOW_REQUEST_HEADERS': True
 }
 
-django_heroku.settings(locals())
+# django_heroku.settings(locals())
     
 FCM_SERVER_KEY="[AAAAcJkoZ-I:APA91bE2NWUD-Q5O5MB8gQaLnN9cQ72hw3T_micRtdO1qPb6qSzGDJhx3iyVJyKqOTsuQujwVt04zG2MPunMmkARVTERoPVGgSI47RSCnBBSwkAZRIzim1xrbvO00Dl3oHeLjnIqTQ_q]"
+
+
+
+PAYU_CONFIG = {
+        "merchant_key": "ZQGI2x56",
+        "merchant_salt": "VTsYoY3kBp",
+        "mode": "test",
+        "success_url": "http://127.0.0.1:8000/payment/success",
+        "failure_url": "http://127.0.0.1:8000/payment/failure"
+  }

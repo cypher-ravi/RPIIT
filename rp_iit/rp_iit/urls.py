@@ -29,10 +29,12 @@ urlpatterns = [
     path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('admin/', admin.site.urls),
+    path('payment/', include('Payment_gateway.urls')),
     path('<str:key>/', include([ 
             path('check_server/', index),
             path('auth/',include('authentication.urls')),
             path('api/', include('rest_api.urls')),
+            
         ]))
 
 
