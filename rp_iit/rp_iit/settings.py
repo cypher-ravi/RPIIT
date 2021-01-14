@@ -93,26 +93,26 @@ WSGI_APPLICATION = 'rp_iit.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-# DATABASES = {
-#    'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'ddm391ps95d268',
-#         'USER': 'bmepsvklzyxonk',
-#         'PASSWORD':'5661d1535b3a06fdc270641c8abd67e47a518030422f6bc7664418ef6bb43950',
-#         'HOST': 'ec2-18-235-107-171.compute-1.amazonaws.com',
-#         'PORT': '5432',
-#     }
-# }
-
-
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'db.sqlite3',
-    },
-    'OPTIONS': {'use_pure': True }
+   'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ddm391ps95d268',
+        'USER': 'bmepsvklzyxonk',
+        'PASSWORD':'5661d1535b3a06fdc270641c8abd67e47a518030422f6bc7664418ef6bb43950',
+        'HOST': 'ec2-18-235-107-171.compute-1.amazonaws.com',
+        'PORT': '5432',
+    }
 }
+
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': 'db.sqlite3',
+#     },
+#     'OPTIONS': {'use_pure': True }
+# }
 
 
 # Password validation
