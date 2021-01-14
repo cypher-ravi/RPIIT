@@ -56,7 +56,6 @@ def verify_user_and_amount(request,user_id,amount,trip_id):
 @csrf_exempt
 def payu_checkout(request,**kwargs):
     if request.method == 'POST':
-        # The dictionary data  should be contains following details
         data = { 'amount': request.POST.get('amount'), 
             'firstname': request.POST.get('name'), 
             'email': request.POST.get('email'),
