@@ -86,7 +86,7 @@ class StudentCulturalActivityDetailSerializer(ModelSerializer):
     img = SerializerMethodField(method_name='get_photo_url')
     class Meta:
         model = CulturalActivity
-        fields = '__all__'
+        exclude = ('student',)
 
     def get_photo_url(self, obj):
         try:
@@ -101,7 +101,7 @@ class StudentSocialActivityDetailSerializer(ModelSerializer):
     img = SerializerMethodField(method_name='get_photo_url')
     class Meta:
         model = SocialActivity
-        fields = '__all__'
+        exclude = ('student',)
 
 
     def get_photo_url(self, obj):

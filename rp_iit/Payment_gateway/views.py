@@ -71,7 +71,7 @@ def payu_checkout(request,**kwargs):
         # No Transactio ID's, Create new with paywix, it's not mandatory
         # Create your own
         # Create transaction Id with payu and verify with table it's not existed
-        txnid = generate_txnid()
+        txnid = generate_txnid() 
         data.update({"txnid": txnid})
         payu_data = payu.transaction(**data)
         return render(request, 'checkout.html', {"posted": payu_data})
