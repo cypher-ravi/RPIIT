@@ -13,10 +13,6 @@ from rest_framework.decorators import api_view
 
 api_key = config('api_key')
 
-
-
-
-
 """
 -----------------------------------> List APIs <------------------------------------------------------------
 """

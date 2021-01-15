@@ -23,7 +23,7 @@ class Announcement(models.Model):
     time  = models.TimeField(auto_now=False, auto_now_add=False,blank=True, null=True)
     title = models.CharField(max_length=100,default='')
     description = models.TextField(default='')
-    img = models.ImageField(upload_to='Announcements/img')
+    img = models.ImageField(upload_to='Announcements/img' ,default='')
     
     
 
@@ -76,7 +76,7 @@ class Sport(models.Model):
     date = models.DateField(blank=True, null=True)
     time  = models.TimeField(auto_now=False, auto_now_add=False)
     venue = models.CharField(max_length=225,default='',blank=True, null=True)
-    img = models.ImageField(upload_to='Sportevents/img',blank=True, null=True)
+    img = models.ImageField(upload_to='Sportevents/img',blank=True, null=True, default='')
     co_ordinator = models.CharField(max_length=120,default='',blank=True, null=True)
 
     class Meta:
@@ -91,7 +91,7 @@ class CulturalActivity(models.Model):
     date = models.DateField()
     time  = models.TimeField(auto_now=False, auto_now_add=False)
     venue = models.CharField(max_length=225,default='',blank=True, null=True)
-    img = models.ImageField(upload_to='Cultural_activity/img',blank=True, null=True)
+    img = models.ImageField(upload_to='Cultural_activity/img',blank=True, null=True, default='')
     description = models.TextField(blank=True, null=True)
    
 
@@ -106,7 +106,7 @@ class SocialActivity(models.Model):
     date = models.DateField()
     time  = models.TimeField(auto_now=False, auto_now_add=False)
     description = models.TextField()
-    img = models.ImageField(upload_to='Social_activity/img')
+    img = models.ImageField(upload_to='Social_activity/img',default='')
     co_ordinator = models.CharField(max_length=120,default='',blank=True, null=True)
     approved = models.BooleanField(default=False)
 
@@ -119,7 +119,7 @@ class SocialActivity(models.Model):
 class Trip(models.Model):
     student = models.ManyToManyField(Student,blank=True)
     name = models.CharField(max_length=50,default='',blank=True, null=True)
-    img = models.ImageField(upload_to='Trip/img',blank=True, null=True)
+    img = models.ImageField(upload_to='Trip/img',blank=True, null=True, default='')
     date = models.DateField(blank=True, null=True)
     time  = models.TimeField(auto_now_add=False,blank=True, null=True)
     venue = models.CharField(max_length=225,default='',blank=True, null=True)
@@ -168,7 +168,7 @@ class PlacementCompany(models.Model):
     city = models.CharField(max_length = 25,default='')
     state = models.CharField(max_length =25,default='')
     added_date = models.DateTimeField(auto_now_add=True)
-    img = models.ImageField(upload_to='Social_activity/img',blank=True, null=True)
+    img = models.ImageField(upload_to='Social_activity/img',blank=True, null=True, default='')
 
     def __str__(self): return self.name
 
