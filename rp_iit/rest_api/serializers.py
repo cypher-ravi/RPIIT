@@ -72,7 +72,7 @@ class StudentSportDetailSerializer(ModelSerializer):
     img = SerializerMethodField(method_name='get_photo_url')
     class Meta:
         model = Sport
-        fields = '__all__'
+        exclude = ('student',)
 
     def get_photo_url(self, obj):
         try:
