@@ -56,4 +56,10 @@ urlpatterns = [
 
     path('add_dummy_data/<int:iterations>', AddDummyData.as_view()),
     path('delete_data', DeleteData.as_view()),
+
+    path('student_profile_search', StudentProfileSearchListView.as_view()),
+    path('comment/<str:sender_id>/<str:receiver_id>', CommentAPIView.as_view()),
+
+    path('emagazine/<str:user_id>/', EmagazineAPIView.as_view()),
+
 ]

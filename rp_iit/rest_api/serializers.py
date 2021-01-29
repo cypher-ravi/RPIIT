@@ -209,3 +209,13 @@ class SocialActivityRequestSerializer(ModelSerializer):
     
 
 
+class CommentSerializer(ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ['comment']
+
+
+class EmagazineSerializer(ModelSerializer):
+    class Meta:
+        model = Emagazine
+        exclude = ['student']

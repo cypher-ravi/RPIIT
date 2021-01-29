@@ -10,6 +10,8 @@ from .models import Announcement, Department, PlacementCompany, Resume, Student
 from .serializers import *
 from django.utils import timezone
 from rest_framework.decorators import api_view
+from rest_framework import filters
+
 
 api_key = config('api_key')
 
@@ -774,3 +776,75 @@ class DeleteData(generics.GenericAPIView):
         from .fakedata import Dummy
         Dummy().deleteData()
         return Response({"detail": 'Data Deleted successfully'})
+
+
+"""
+--------------------------------> Search API starts<--------------------------------------------------
+"""
+class StudentProfileSearchListView(generics.ListAPIView):
+    queryset = Student.objects.all()
+    serializer_class = StudentProfileSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name',]
+
+"""
+--------------------------------> Search API ends<--------------------------------------------------
+"""
+
+
+"""
+-------------------------------->Comment APIs starts<--------------------------------------------------
+"""
+
+class CommentAPIView(generics.GenericAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+    def post(self, request, *args, **kwargs):
+        if kwargs['key'] == api_key:
+            commenter = Student.objects.filter(user=kwargs['sender_id']).first()
+            receiver = Student.objects.filter(user=kwargs['receiver_id']).first()
+            if commenter and receiver and not commenter == receiver:
+                serializer = self.serializer_class(data=request.data)
+                if serializer.is_valid(raise_exception=True):
+                    serializer.save(student_sender =commenter,student_comment_reciever=receiver)
+                    return Response({"commented":True})
+                else:
+                    return Response({"detail":"error"})
+            return Response({"detail":"either commenter or receiver not exists or commenter and receiver are same"})
+        else:
+            return Response({"detail":"wrong api key"})
+
+
+"""
+-------------------------------->Comment APIs ends<--------------------------------------------------
+"""
+
+
+
+"""
+-------------------------------->Emagazine APIs starts<--------------------------------------------------
+"""
+
+
+class EmagazineAPIView(generics.GenericAPIView):
+    queryset = Emagazine.objects.all()
+    serializer_class = EmagazineSerializer
+
+    def post(self, request, *args, **kwargs):
+        if kwargs['key'] == api_key:
+            student = Student.objects.filter(user=kwargs['user_id']).first()
+            if student != None:
+                serializer = EmagazineSerializer(data=request.data)
+                if serializer.is_valid(raise_exception=True):
+                    serializer.save(student = student)
+                    return Response({"emagazine_added": True})
+                return Response({"detail": "errors"})
+            return Response({"student":False})
+        return Response({"detail":"wrong api key"})
+
+
+
+"""
+-------------------------------->Emagazine APIs ends<--------------------------------------------------
+"""

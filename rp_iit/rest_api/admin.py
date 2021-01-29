@@ -59,3 +59,10 @@ class TripAdmin(admin.ModelAdmin):
 class SocialActivityAdmin(admin.ModelAdmin):
     list_display = ('name',) 
 
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(Emagazine)
+class EmagazineAdmin(admin.ModelAdmin):
+    list_display = ('name_of_topic',) 

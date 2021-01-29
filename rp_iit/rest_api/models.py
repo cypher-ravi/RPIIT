@@ -188,3 +188,42 @@ class StudentSportProfile(models.Model):
 
     def __str__(self):
         return self.roll_no
+
+
+class Comment(models.Model):
+    student_sender =  models.ForeignKey(Student,on_delete=models.CASCADE,help_text="Student who commented",related_name='commenter')
+    student_comment_reciever =  models.ForeignKey(Student,on_delete=models.CASCADE,help_text="Student who received comment",related_name='receiver')
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True,blank=True, null=True)    
+
+    class Meta:
+        verbose_name = ("Comment")
+        verbose_name_plural = ("Comments")
+
+    def __str__(self):
+        return self.student_sender.name + " commented on profile of " + self.student_comment_reciever.name
+
+
+    def get_absolute_url(self):
+        return reverse("Comment_detail", kwargs={"pk": self.pk})
+
+
+class Emagazine(models.Model):
+    student = models.ForeignKey(Student,on_delete=models.CASCADE)
+    name_of_topic = models.TextField()
+    description = models.TextField()
+    image = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True,blank=True, null=True)
+
+
+
+
+    class Meta:
+        verbose_name = ("E-magazine")
+        verbose_name_plural = ("E-magazines")
+
+    def __str__(self):
+        return self.name_of_topic
+
+    def get_absolute_url(self):
+        return reverse("E-magazine_detail", kwargs={"pk": self.pk})

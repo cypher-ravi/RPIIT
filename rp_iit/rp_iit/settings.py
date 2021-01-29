@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'drf_extra_fields',
     'rest_framework_swagger',
     'drf_yasg',
+    'django_filters',
     
     
     
