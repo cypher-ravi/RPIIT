@@ -15,10 +15,6 @@ from rest_framework import filters
 
 api_key = config('api_key')
 
-
-
-
-
 """
 -----------------------------------> List APIs <------------------------------------------------------------
 """
@@ -748,7 +744,7 @@ class StudentInfoView(generics.RetrieveAPIView):
                     student_profile = True
 
                 if student_profile == True:
-                    return Response({'user_id':user[0].id,'name':student.name,'student_by_admin':user[0].is_student,'student_profile':student_profile,'resume':resume_submission})
+                    return Response({'user_id':user[0].id,'name':student[0].name,'student_by_admin':user[0].is_student,'student_profile':student_profile,'resume':resume_submission})
                 return Response({'user_id':user[0].id,'student_by_admin':user[0].is_student,'student_profile':student_profile,'resume':resume_submission})
             else:
                 return Response({"detail":'user not exists'})
