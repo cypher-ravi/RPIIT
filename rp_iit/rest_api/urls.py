@@ -6,14 +6,20 @@ app_name = 'rest_api'
 
 urlpatterns = [
     path('announcements/',AnnouncementListView.as_view()),
+    path('announcements_search/',AnnouncementSearch.as_view()),
 
     path('upload_resume/<str:pk>', ResumeUploadView.as_view()),
     path('update_student_resume/<str:pk>', UpdateStudentResumeView.as_view()),
     
     
     path('student_profile/<str:pk>', StudentProfileView.as_view()),
-    path('student_sport_profile/<str:pk>', StudentSportProfileView.as_view()),
     path('update_student_profile/<str:pk>', UpdateStudentProfileView.as_view()),
+    
+    path('student_sport_profile/<str:pk>', StudentSportProfileView.as_view()),
+    path('update_student_sport_profile/<str:pk>', UpdateStudentSportProfileView.as_view()),
+
+    path('student_yearbook_profile/<str:pk>', StudentYearBookProfileView.as_view()),
+    path('update_student_year_book_profile/<str:pk>', UpdateStudentYearBookProfileView.as_view()),
 
     path('student_detail/<str:pk>', StudentDetailsView.as_view()),
     path('student_sports_detail/<str:pk>', SportsDetailOfStudentView.as_view()),
@@ -25,7 +31,7 @@ urlpatterns = [
     path('list_of_cultural_activties/<str:user_id>/', CulturalActivityList.as_view()),
     path('list_of_social_activties/<str:user_id>/', SocialActivityList.as_view()),
     path('list_of_sport_events/<str:user_id>/', SportEventsList.as_view()),
-    path('list_of_trips/', ListOfTripView.as_view()),
+    path('list_of_trips/<str:user_id>/', ListOfTripView.as_view()),
     
 
 

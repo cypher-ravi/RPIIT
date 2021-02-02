@@ -19,6 +19,15 @@ api_key = config('api_key')
 -----------------------------------> List APIs <------------------------------------------------------------
 """
 # Create your views here.
+
+
+class AnnouncementSearch(generics.ListAPIView):
+    queryset = Announcement.objects.all()
+    serializer_class = AnnouncementSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title','id']
+
+
 class AnnouncementListView(generics.GenericAPIView):
     """
     This API provides list of latest announcements ordered by date
@@ -49,12 +58,14 @@ class CulturalActivityList(generics.ListAPIView):
             user = User.objects.filter(id=kwargs['user_id']).first()
             if user != None:
                 student = Student.objects.filter(user=user).first()
+
                 if student != None:  
                     cultural_activities_in = CulturalActivity.objects.all().order_by('-date').exclude(student = student)
-                    serializer = CulturalActivityListSerializer(cultural_activities_in,many=True,context={"request": request})
-                    return Response(serializer.data)
                 else:
-                        return Response({"detail":"student profile not found"})
+                    cultural_activities_in = CulturalActivity.objects.all().order_by('-date')
+
+                serializer = CulturalActivityListSerializer(cultural_activities_in,many=True,context={"request": request})
+                return Response(serializer.data)
             else:
                 return Response({"dedetail":"user not found"})
         else:
@@ -75,12 +86,15 @@ class SportEventsList(generics.ListAPIView):
             user = User.objects.filter(id=kwargs['user_id']).first()
             if user != None:
                 student = Student.objects.filter(user=user).first()
+
                 if student != None: 
                     sports_participanted_in = Sport.objects.all().order_by('-date').exclude(student = student)
-                    serializer = SportListSerializer(sports_participanted_in,many=True,context={"request": request})
-                    return Response(serializer.data)
                 else:
-                    return Response({"detail":"student profile not found"})
+                    sports_participanted_in = Sport.objects.all().order_by('-date')
+
+                serializer = SportListSerializer(sports_participanted_in,many=True,context={"request": request})
+                return Response(serializer.data)
+                
             else:
                 return Response({"dedetail":"user not found"})
         return Response({'detail':'wrong api key'})
@@ -101,10 +115,11 @@ class SocialActivityList(generics.ListAPIView):
                 student = Student.objects.filter(user=user).first()
                 if student != None:
                     social_activities_in = SocialActivity.objects.filter(approved=True).order_by('-date').exclude(student=student)
-                    serializer = SocialActivityListSerializer(social_activities_in,many=True,context={"request": request})
-                    return Response(serializer.data)
                 else:
-                    return Response({"detail":"student profile not found"})
+                    social_activities_in = SocialActivity.objects.filter(approved=True).order_by('-date')
+
+                serializer = SocialActivityListSerializer(social_activities_in,many=True,context={"request": request})
+                return Response(serializer.data)
             else:
                 return Response({"dedetail":"user not found"})
         return Response({'detail':'wrong api key'})
@@ -125,10 +140,11 @@ class ListOfCompaniesView(generics.ListAPIView):
                 student = Student.objects.filter(user=user).first()
                 if student != None:
                     companies = PlacementCompany.objects.all().exclude(student=student)
-                    serializer = PlacementCompanySerializer(companies,many=True,context={"request": request})
-                    return Response(serializer.data)
                 else:
-                    return Response({"detail":"student profile not found"})
+                    companies = PlacementCompany.objects.all()
+
+                serializer = PlacementCompanySerializer(companies,many=True,context={"request": request})
+                return Response(serializer.data)
             else:
                 return Response({"detail":"user not found"})
         return Response({'detail':'wrong api key'})
@@ -145,9 +161,17 @@ class ListOfTripView(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         if kwargs['key'] == api_key: 
-            trips = Trip.objects.all()
-            serializer = TripListSerializer(trips,many=True,context={"request": request})
-            return Response(serializer.data)
+            user = User.objects.filter(id=kwargs['user_id']).first()
+            if user != None:
+                student = Student.objects.filter(user=user).first()
+                if student != None:
+                    trips = Trip.objects.all().exclude(student=student)
+                else:
+                    trips = Trip.objects.all() 
+                    
+                serializer = TripListSerializer(trips,many=True,context={"request": request})
+                return Response(serializer.data)
+            return Response({"detail":"user not found"})
         return Response({'detail':'wrong api key'})
 
 
@@ -226,6 +250,19 @@ class StudentSportProfileView(generics.GenericAPIView):
     queryset = StudentSportProfile.objects.all()
     serializer_class = StudentSportProfileSerializer
 
+    def get(self, request, *args, **kwargs):
+        if kwargs['key'] == api_key:
+            user = User.objects.filter(id=kwargs['pk']).first()
+            if user != None:
+                student_sport_profile = StudentSportProfile.objects.filter(user=user).first()
+                if student_sport_profile != None:
+                    serializer = StudentSportProfileSerializer(student_sport_profile)
+                    return Response(serializer.data)
+                return Response({"detail":"sport profile not found"})
+            return Response({"detail":"user not found"})
+        else:
+            return Response({"detail":"wrong api key"})
+        
 
     def post(self, request, *args, **kwargs):
         if kwargs['key'] == api_key:
@@ -235,6 +272,39 @@ class StudentSportProfileView(generics.GenericAPIView):
                 if serializer.is_valid(raise_exception=True):
                     serializer.save(user=user[0])
                     return Response({"detail":"sport profile create successfully"})
+                return Response({"detail":"wrong data"})
+            return Response({"detail":"user not found"})
+        else:return Response({"detail":"wrong api key"})
+
+
+
+
+class StudentYearBookProfileView(generics.GenericAPIView):
+    queryset = YearBookProfile.objects.all()
+    serializer_class = StudentYearBookProfileSerializer
+
+    def get(self, request, *args, **kwargs):
+        if kwargs['key'] == api_key:
+            user = User.objects.filter(id=kwargs['pk']).first()
+            if user != None:
+                student_yearbook_profile = YearBookProfile.objects.filter(user=user).first()
+                if student_yearbook_profile != None:
+                    serializer = StudentYearBookProfileSerializer(student_yearbook_profile)
+                    return Response(serializer.data)
+                return Response({"detail":"yearbook profile not found"})
+            return Response({"detail":"user not found"})
+        else:
+            return Response({"detail":"wrong api key"})
+        
+
+    def post(self, request, *args, **kwargs):
+        if kwargs['key'] == api_key:
+            user = User.objects.filter(id=kwargs['pk']).first()
+            if user != None:
+                serializer = StudentYearBookProfileSerializer(data=request.data)
+                if serializer.is_valid(raise_exception=True):
+                    serializer.save(user=user)
+                    return Response({"detail":"yearbook profile create successfully"})
                 return Response({"detail":"wrong data"})
             return Response({"detail":"user not found"})
         else:return Response({"detail":"wrong api key"})
@@ -262,7 +332,7 @@ class StudentDetailsView(generics.GenericAPIView):
             if student_detail.exists():
                 serializer = StudentProfileSerializer(student_detail,many=True)
                 return Response(serializer.data)
-            return Response({'detail':'no such student with this session id'})
+            return Response({'detail':'no such student with this user id'})
         else:return Response({'detail':'wrong api key'})
 
 
@@ -374,7 +444,24 @@ class UpdateStudentResumeView(generics.RetrieveUpdateAPIView):
     lookup_field = 'user__id'
     lookup_url_kwarg = 'pk'
 
+class UpdateStudentSportProfileView(generics.RetrieveUpdateAPIView):
+    """
+        Update student sport profile by its user id
+    """
+    queryset = StudentSportProfile.objects.all()
+    serializer_class = StudentSportProfileSerializer
+    lookup_field = 'user__id'
+    lookup_url_kwarg = 'pk'
 
+
+class UpdateStudentYearBookProfileView(generics.RetrieveUpdateAPIView):
+    """
+        Update student year book profile by its user id
+    """
+    queryset = YearBookProfile.objects.all()
+    serializer_class = StudentYearBookProfileSerializer
+    lookup_field = 'user__id'
+    lookup_url_kwarg = 'pk'
 
 """
 ------------------------------------------------>Update APIs Profile and Resume ends<-----------------------------------------

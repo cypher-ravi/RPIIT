@@ -36,8 +36,8 @@ pycparser==2.20
 pyfcm==1.5.1
 PyJWT==1.7.1
 pyparsing==2.4.7
-python-dateutil==2.4
 python-decouple==3.3
+python-dateutil==1.5
 python3-openid==3.2.0
 pytz==2020.4
 requests==2.25.1

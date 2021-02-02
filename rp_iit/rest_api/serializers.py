@@ -19,20 +19,21 @@ class AnnouncementSerializer(ModelSerializer):
             return None
 
 class ResumeUploadSerializer(ModelSerializer):
-    img = SerializerMethodField(method_name='get_img')
+    # img = SerializerMethodField(method_name='get_img')
+    img = Base64ImageField()
     class Meta:
         model = Resume
         exclude = ['user']
     
-    def get_img(self,obj):
-        try:              
-            image = open(obj.img.path, "rb") 
-            data = image.read()
-            base64_encoded_data = base64.b64encode(data)
-            base64_message = base64_encoded_data.decode('utf-8')
-            return base64_message
-        except:
-            return None 
+    # def get_img(self,obj):
+    #     try:              
+    #         image = open(obj.img.path, "rb") 
+    #         data = image.read()
+    #         base64_encoded_data = base64.b64encode(data)
+    #         base64_message = base64_encoded_data.decode('utf-8')
+    #         return base64_message
+    #     except:
+    #         return None 
 
         
 
@@ -187,6 +188,12 @@ class StudentSportProfileSerializer(ModelSerializer):
         model = StudentSportProfile
         exclude = ['user']
         
+class StudentYearBookProfileSerializer(ModelSerializer):
+    image = Base64ImageField()
+    class Meta:
+        model = YearBookProfile
+        exclude = ['user']
+        
 
 
 
@@ -216,6 +223,7 @@ class CommentSerializer(ModelSerializer):
 
 
 class EmagazineSerializer(ModelSerializer):
+    image = Base64ImageField()
     class Meta:
         model = Emagazine
         exclude = ['student']

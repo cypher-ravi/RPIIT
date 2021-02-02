@@ -168,7 +168,7 @@ class PlacementCompany(models.Model):
     city = models.CharField(max_length = 25,default='')
     state = models.CharField(max_length =25,default='')
     added_date = models.DateTimeField(auto_now_add=True)
-    img = models.ImageField(upload_to='Social_activity/img', null=True, default='')
+    img = models.ImageField(upload_to='PlacementCompany/img', null=True, default='')
 
     def __str__(self): return self.name
 
@@ -212,7 +212,7 @@ class Emagazine(models.Model):
     student = models.ForeignKey(Student,on_delete=models.CASCADE)
     name_of_topic = models.TextField()
     description = models.TextField()
-    image = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to='Emagazine/img', null=True, default='')
     created_at = models.DateTimeField(auto_now_add=True,blank=True, null=True)
 
 
@@ -230,6 +230,7 @@ class Emagazine(models.Model):
 
 
 class YearBookProfile(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE,blank=True, null=True)
     name = models.CharField(max_length=225,default='')
     email = models.CharField(max_length=225,default='')
     phone = models.CharField(max_length=225,default='',blank=True, null=True)
@@ -241,7 +242,7 @@ class YearBookProfile(models.Model):
     describe_your_final_year = models.CharField(max_length=500,default='',blank=True, null=True)
     fav_curc_activity = models.CharField(max_length=500,default='',blank=True, null=True)
     most_emb_moment =  models.CharField(max_length=500,default='',blank=True, null=True)
-    image = models.ImageField(upload_to='YearBookProfileImg')
+    image = models.ImageField(upload_to='YearBookProfileImg',blank=True, null=True)
 
     
     
