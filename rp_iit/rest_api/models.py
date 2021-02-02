@@ -227,3 +227,31 @@ class Emagazine(models.Model):
 
     def get_absolute_url(self):
         return reverse("E-magazine_detail", kwargs={"pk": self.pk})
+
+
+class YearBookProfile(models.Model):
+    name = models.CharField(max_length=225,default='')
+    email = models.CharField(max_length=225,default='')
+    phone = models.CharField(max_length=225,default='',blank=True, null=True)
+    department = models.CharField(max_length=225,default='',blank=True, null=True)
+    i_will_always_remember = models.CharField(max_length =500,default='',blank=True, null=True)
+    your_best_hidden_talent = models.CharField(max_length=500,default='',blank=True, null=True)
+    dream_in_life = models.CharField(max_length=500,default='',blank=True, null=True)
+    what_makes_you_laugh_the_most = models.CharField(max_length=500,default='',blank=True, null=True)
+    describe_your_final_year = models.CharField(max_length=500,default='',blank=True, null=True)
+    fav_curc_activity = models.CharField(max_length=500,default='',blank=True, null=True)
+    most_emb_moment =  models.CharField(max_length=500,default='',blank=True, null=True)
+    image = models.ImageField(upload_to='YearBookProfileImg')
+
+    
+    
+
+    class Meta:
+        verbose_name = ("YearBookProfile")
+        verbose_name_plural = ("YearBookProfiles")
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse("YearBookProfile_detail", kwargs={"pk": self.pk})
