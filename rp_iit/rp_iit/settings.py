@@ -195,10 +195,18 @@ FCM_SERVER_KEY="[AAAAcJkoZ-I:APA91bE2NWUD-Q5O5MB8gQaLnN9cQ72hw3T_micRtdO1qPb6qSz
 
 
 
-PAYU_CONFIG = {
-        "merchant_key": "ZQGI2x56",
-        "merchant_salt": "VTsYoY3kBp",
-        "mode": "test",
-        "success_url": "http://127.0.0.1:8000/payment/success",
-        "failure_url": "http://127.0.0.1:8000/payment/failure"
-  }
+# PAYU_CONFIG = {
+#         "merchant_key": "ZQGI2x56",
+#         "merchant_salt": "VTsYoY3kBp",
+#         "mode": "test",
+#         "success_url": "http://127.0.0.1:8000/payment/success",
+#         "failure_url": "http://127.0.0.1:8000/payment/failure"
+#   }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'rk7305758@gmail.com'
+EMAIL_HOST_PASSWORD = 'ztupoklvzybovgtd'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'RPIIT<rk7305758@gmail.com>'
