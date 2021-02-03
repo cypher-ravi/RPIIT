@@ -131,8 +131,6 @@ class Trip(models.Model):
     def __str__(self): return self.name
 
 
-
-
 class Resume(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,blank=True,null=True)
     img = models.CharField(max_length=1000,default='',blank=True,null=True)
