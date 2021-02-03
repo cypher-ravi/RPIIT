@@ -1,1 +1,4 @@
-web: gunicorn rp_iit.wsgi
+web: gunicorn rp_iit.wsgi:application --log-file - --log-level debug
+python manage.py collectstatic --noinput
+
+manage.py migrate

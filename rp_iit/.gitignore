@@ -1,6 +1,7 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
-migrations/
+
+*.sqlite3
 *.py[cod]
 *$py.class
 
@@ -81,9 +82,9 @@ celerybeat-schedule
 
 # Environments
 .venv
-# env/
+env/
 venv/
-# ENV/
+ENV/
 
 # Spyder project settings
 .spyderproject
@@ -100,4 +101,5 @@ venv/
 
 *.sqlite3
 .vagrant
-static_in_env
+*.db.sqlite3
+
